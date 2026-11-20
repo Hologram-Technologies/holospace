@@ -53,7 +53,7 @@ theorem{
   parameters: [a1 : Nat, d1 : Nat, a2 : Nat, d2 : Nat],
   statement: ((breaksArchChangesIdentity a1 d1 a2 d2) = false),
   proof: linear_arithmetic{definitions: [breaksArchChangesIdentity, digestBound, encode]},
-  axioms: [Classical.choice, Quot.sound, propext]
+  axioms: [Quot.sound, propext]
 }
 
 definition{
