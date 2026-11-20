@@ -12,10 +12,10 @@ One request is a kernel word followed by that kernel's fields; `Holospace::dispa
 | `admission` | `HolospaceAdmission` | 7 |
 | `isolation` | `HolospaceIsolation` | 3 |
 | `gate` | `HolospaceCapabilityGate` | 16 |
-| `lifecycle` | `HolospaceLifecycle` | 9 |
+| `lifecycle` | `HolospaceLifecycle` | 12 |
 | none (not routed) | `HolospaceIdentity` | 3 |
 
-Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 43 theorems with each one's exact axiom set. The same 43 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
+Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 46 theorems with each one's exact axiom set. The same 46 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
 
 Built: the holo at the page above. Its 48 acceptance vectors pass in the template's build, and again when the earlier shell opens the live bytes and asks its own launch verdict kernel (tested). Fingerprint `3caff77ede83bc3c3e5f680380d1f217e0903e51ac04959152f91965d6bbebf7`.
 
@@ -23,7 +23,7 @@ Registered claims: six, `HK-01` to `HK-06`, one per module. Each is every theore
 
 Changes from the earlier kernels:
 - Isolation is part of the proved, built app; it no longer needs an unproved interpreter.
-- Lifecycle is one step, not a stateful app: phase, whether a snapshot exists, and the action go in; the answer comes out. The body applies the change each answer means. The earlier theorem "a suspended holospace always has a snapshot" is gone; in its place resume is proved never to proceed without one.
+- Lifecycle is one step, not a stateful app: phase, whether a snapshot exists, and the action go in; the answer comes out. The body applies the change each answer means. The earlier theorem "a suspended holospace always has a snapshot" is restated as an invariant every step preserves (`lifecycleInv011`), and resume is proved never to proceed without a snapshot.
 - The capability gate carries its full 16 theorems.
 - Every definition carries its kernel's word as a prefix, because the SDK exports all modules into one Rust crate.
 
@@ -62,8 +62,8 @@ Status words. Proved: a theorem of the published app, checked by Lean in the tem
 |---|---|---|---|
 | 1 | One state at a time | By construction | The request carries one `phase`, one of four values. |
 | 2 | Only the four moves happen | Proved | `lifecycleInv001` to `003`: started, paused and resumed are answered only from the phase each needs. `lifecycleInv009`: terminate is always answered ended unless already terminated. That the body moves to the phase an answer names is tested. |
-| 3 | Terminated is final | Proved | `lifecycleInv005`: every action in the terminated phase is refused. |
-| 4 | An acknowledged suspend has a snapshot | Tested | The answer `paused` obliges the body to write the snapshot; the host test checks it does. Not a theorem since lifecycle became one step. |
+| 3 | Terminated is final | Proved | `lifecycleInv005`: every action in the terminated phase is refused. `lifecycleInv012`: the next phase after terminated is terminated. |
+| 4 | An acknowledged suspend has a snapshot | Proved for the model's step | `lifecycleInv010`: whenever the answer is paused, the next state keeps a snapshot. `lifecycleInv011`: if "suspended implies a snapshot" holds before a step, it holds after, so it holds in every state reached from the start. That the body moves to the model's next state is tested. |
 | 5 | Resume uses the most recent snapshot | Proved in part | `lifecycleInv004`: resume is never answered without a snapshot. That it is the most recent one is tested. |
 | 6 | Same state and event, same result | By construction | The judge is a pure function. |
 | 7 | Every durable key derives from the identity | Tested | A property of the body's key function. |
@@ -83,7 +83,7 @@ Status words. Proved: a theorem of the published app, checked by Lean in the tem
 | 21 | Same definition, same identity, on any device | Proved for the model | `sameGivesSame`, for a stand-in number encoding. The real byte encoding and "any device" are tested. |
 | 22 | The architecture is part of the identity | Proved for the model | `archChangesIdentity`, `encodingInjective`, same stand-in encoding. The real encoding is tested. |
 
-Count: 12 proved outright, 2 proved in part, 2 proved for a stand-in model, 2 by construction, 3 tested only, 1 assumed. Guarantees 4, 7 and 16 cannot become theorems of this app: they are about what the body does with an answer.
+Count: 12 proved outright, 2 proved in part, 3 proved for the model (4, 21, 22), 2 by construction, 2 tested only, 1 assumed. Guarantees 7 and 16 cannot become theorems of this app: they are about what the body does. The lifecycle model defines the next phase and next snapshot of every step (`lifecycleNextPhase`, `lifecycleNextSnapshot`); the app still answers with one word, and the body is expected to move to exactly that next state.
 
 ## Limits
 

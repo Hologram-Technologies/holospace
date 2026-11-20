@@ -31,7 +31,7 @@
   },
   "promise": {
     "headline": "Every Holospace decision is made by a rule Lean has proved things about.",
-    "detail": "Five kernels and an identity encoding, 43 theorems in all, each checked by the Lean kernel when this page was built. The proofs are about the rules; that the shell obeys an answer is tested, not proved."
+    "detail": "Five kernels and an identity encoding, 46 theorems in all, each checked by the Lean kernel when this page was built. The proofs are about the rules; that the shell obeys an answer is tested, not proved."
   },
   "claim": "HK-01: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise. HK-02: Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import. HK-03: A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content. HK-04: Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow. HK-05: Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate. HK-06: The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one.",
   "proposition": {
@@ -65,7 +65,7 @@
       "where": "app/src/HolospaceCapabilityGateProofs.lex.tex"
     },
     {
-      "name": "HolospaceLifecycleProofs: 9 theorems",
+      "name": "HolospaceLifecycleProofs: 12 theorems",
       "statement": "Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate",
       "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
       "where": "app/src/HolospaceLifecycleProofs.lex.tex"

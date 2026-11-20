@@ -35,7 +35,7 @@ Feature: holospace
   @HK-05 @build
   Scenario: Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate
     Given the model in app/src/HolospaceLifecycleProofs.lex.tex
-    When the Lean kernel checks its 9 theorems during prismpm verify
+    When the Lean kernel checks its 12 theorems during prismpm verify
     Then no request meets any condition holospace.pins.tsv lists for lifecycle
     And requests that begin with lifecycle are answered by HolospaceLifecycle
 

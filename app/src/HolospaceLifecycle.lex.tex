@@ -193,6 +193,20 @@ definition{
 }
 
 definition{
+  name: lifecycleNextPhase,
+  parameters: [request : LifecycleRequest],
+  result: Nat,
+  body: (if ((lifecycleJudge request) =? (lifecycleAnswerStarted)) then (lifecyclePhaseRunning) else (if ((lifecycleJudge request) =? (lifecycleAnswerPaused)) then (lifecyclePhaseSuspended) else (if ((lifecycleJudge request) =? (lifecycleAnswerResumed)) then (lifecyclePhaseRunning) else (if ((lifecycleJudge request) =? (lifecycleAnswerEnded)) then (lifecyclePhaseTerminated) else (project request phase)))))
+}
+
+definition{
+  name: lifecycleNextSnapshot,
+  parameters: [request : LifecycleRequest],
+  result: Nat,
+  body: (if ((lifecycleJudge request) =? (lifecycleAnswerPaused)) then (lifecycleSnapshotKept) else (project request snapshot))
+}
+
+definition{
   name: lifecycleEncodeAnswer,
   parameters: [code : Nat],
   result: Bytes,
