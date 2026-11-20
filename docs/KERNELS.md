@@ -17,7 +17,7 @@ One request is a kernel word followed by that kernel's fields; `Holospace::dispa
 
 Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 46 theorems with each one's exact axiom set. The same 46 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
 
-Built: the holo at the page above. Its 48 acceptance vectors pass in the template's build, and again when the earlier shell opens the live bytes and asks its own launch verdict kernel (tested). Fingerprint `3caff77ede83bc3c3e5f680380d1f217e0903e51ac04959152f91965d6bbebf7`.
+Built: the holo at the page above. Its 48 acceptance vectors pass in the template's build, and again when the earlier shell opens the live bytes and asks its own launch verdict kernel (tested). The fingerprint is shown on the page; it changes with every commit, because the holo's provenance names the commit that built it.
 
 Registered claims: six, `HK-01` to `HK-06`, one per module. Each is every theorem of that module, pinned by `features/suites/holospace.pins.tsv`. One claim per kernel, not per theorem, is what keeps the test file under the template's size ceiling.
 
@@ -55,6 +55,8 @@ The launch verdict no longer has a published holo; its kernel is in `kernels/lau
 provisioning-identity: hand-written LexLean in `kernels/provisioning-identity/src/`, verified through the LexLean gateway (task 223, state "verified"). The gateway returned no attestation id. It is a bare model file, not a full Prism project, and has no judge or vectors.
 
 ## The 22 guarantees against the published app
+
+Phase 1 is closed against this table at `b8a4845` (2026-11-20): the gate passed there with all 46 theorems, and every guarantee below is either proved or explicitly marked. Closing Phase 1 does not mean every guarantee is proved; it means none is left unstated.
 
 Status words. Proved: a theorem of the published app, checked by Lean in the template's gate. By construction: true of the model's shape, with no theorem. Tested: a property of the running code, covered by the shell's tests, which are not in this repository. Assumed: taken on trust.
 
