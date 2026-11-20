@@ -78,13 +78,13 @@ fn holospace_hk_04() {
     pinned("gate", "HolospaceCapabilityGateProofs");
 }
 
-/// `HK-05`: Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate
+/// `HK-05`: Start, suspend and resume are answered only in the phase each needs, resume only with the latest snapshot, and nothing follows terminate
 #[test]
 fn holospace_hk_05() {
     pinned("lifecycle", "HolospaceLifecycleProofs");
 }
 
-/// `HK-06`: The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one
+/// `HK-06`: The same architecture and definition digest give the same identity bytes, and a different architecture or digest always gives different ones
 #[test]
 fn holospace_hk_06() {
     pinned("identity", "HolospaceIdentity");

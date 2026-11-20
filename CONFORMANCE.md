@@ -36,8 +36,8 @@ model does not sanction.
 | `HK-02` | `build` | Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import |
 | `HK-03` | `build` | A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content |
 | `HK-04` | `build` | Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow |
-| `HK-05` | `build` | Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate |
-| `HK-06` | `build` | The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one |
+| `HK-05` | `build` | Start, suspend and resume are answered only in the phase each needs, resume only with the latest snapshot, and nothing follows terminate |
+| `HK-06` | `build` | The same architecture and definition digest give the same identity bytes, and a different architecture or digest always gives different ones |
 
 ## Cited authorities
 

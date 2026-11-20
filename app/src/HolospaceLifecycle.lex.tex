@@ -14,10 +14,6 @@ definition{name: lifecyclePhaseSuspended, parameters: [], result: Nat, body: 2}
 
 definition{name: lifecyclePhaseTerminated, parameters: [], result: Nat, body: 3}
 
-definition{name: lifecycleSnapshotNone, parameters: [], result: Nat, body: 0}
-
-definition{name: lifecycleSnapshotKept, parameters: [], result: Nat, body: 1}
-
 definition{name: lifecycleActionStart, parameters: [], result: Nat, body: 0}
 
 definition{name: lifecycleActionSuspend, parameters: [], result: Nat, body: 1}
@@ -40,7 +36,12 @@ structure{
   name: LifecycleRequest,
   type_parameters: [],
   parameters: [],
-  fields: [{name: phase, type: Nat}, {name: snapshot, type: Nat}, {name: action, type: Nat}]
+  fields: [
+    {name: phase, type: Nat},
+    {name: saved, type: Nat},
+    {name: chosen, type: Nat},
+    {name: action, type: Nat}
+  ]
 }
 
 definition{
@@ -92,10 +93,23 @@ definition{
 }
 
 definition{
-  name: lifecycleParseSnapshot,
+  name: lifecycleParseSaved,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6e6f6e65 : Bool) then (ctor Option.some [Nat] (lifecycleSnapshotNone)) else (if (prim equal value 0x6b657074 : Bool) then (ctor Option.some [Nat] (lifecycleSnapshotKept)) else (ctor Option.none [Nat])))
+  body: (match (lifecycleParseNumber value)
+    | Option.none => (ctor Option.none [Nat])
+    | Option.some parsed => (if (1000000 <? parsed) then (ctor Option.none [Nat]) else (ctor Option.some [Nat] parsed))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: lifecycleParseChosen,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (match (lifecycleParseNumber value)
+    | Option.none => (ctor Option.none [Nat])
+    | Option.some parsed => (if (1000000 <? parsed) then (ctor Option.none [Nat]) else (ctor Option.some [Nat] parsed))),
+  axioms: [Quot.sound, propext]
 }
 
 definition{
@@ -128,12 +142,22 @@ definition{
 }
 
 definition{
-  name: lifecycleDecodeField3,
-  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
+  name: lifecycleDecodeField4,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
   result: (Option LifecycleRequest),
   body: (let e : Nat := (lifecycleFieldEnd s start (Foundation.Bytes::byteLength s)); (match (lifecycleParseAction (lifecycleSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [LifecycleRequest])
-    | Option.some v3 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [LifecycleRequest] (record LifecycleRequest {phase := v1, snapshot := v2, action := v3})) else (ctor Option.none [LifecycleRequest])))),
+    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [LifecycleRequest] (record LifecycleRequest {phase := v1, saved := v2, chosen := v3, action := v4})) else (ctor Option.none [LifecycleRequest])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: lifecycleDecodeField3,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
+  result: (Option LifecycleRequest),
+  body: (let e : Nat := (lifecycleFieldEnd s start (Foundation.Bytes::byteLength s)); (match (lifecycleParseChosen (lifecycleSliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [LifecycleRequest])
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (lifecycleDecodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
 }
 
@@ -141,7 +165,7 @@ definition{
   name: lifecycleDecodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
   result: (Option LifecycleRequest),
-  body: (let e : Nat := (lifecycleFieldEnd s start (Foundation.Bytes::byteLength s)); (match (lifecycleParseSnapshot (lifecycleSliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (lifecycleFieldEnd s start (Foundation.Bytes::byteLength s)); (match (lifecycleParseSaved (lifecycleSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [LifecycleRequest])
     | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (lifecycleDecodeField3 s (e + 1) v1 v2) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
@@ -168,14 +192,14 @@ definition{
   name: lifecycleRule2,
   parameters: [request : LifecycleRequest],
   result: Bool,
-  body: (((project request phase) =? (lifecyclePhaseRunning)) && ((project request action) =? (lifecycleActionSuspend)))
+  body: ((((project request phase) =? (lifecyclePhaseRunning)) && ((project request action) =? (lifecycleActionSuspend))) && ((project request saved) <? 1000000))
 }
 
 definition{
   name: lifecycleRule3,
   parameters: [request : LifecycleRequest],
   result: Bool,
-  body: ((((project request phase) =? (lifecyclePhaseSuspended)) && ((project request snapshot) =? (lifecycleSnapshotKept))) && ((project request action) =? (lifecycleActionResume)))
+  body: (((((project request phase) =? (lifecyclePhaseSuspended)) && ((project request action) =? (lifecycleActionResume))) && (0 <? (project request saved))) && ((project request chosen) =? (project request saved)))
 }
 
 definition{
@@ -200,10 +224,10 @@ definition{
 }
 
 definition{
-  name: lifecycleNextSnapshot,
+  name: lifecycleNextSaved,
   parameters: [request : LifecycleRequest],
   result: Nat,
-  body: (if ((lifecycleJudge request) =? (lifecycleAnswerPaused)) then (lifecycleSnapshotKept) else (project request snapshot))
+  body: (if ((lifecycleJudge request) =? (lifecycleAnswerPaused)) then ((project request saved) + 1) else (project request saved))
 }
 
 definition{
@@ -217,7 +241,7 @@ definition{
   name: lifecycleDispatch,
   parameters: [value : Bytes],
   result: Bytes,
-  body: (if (88 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (lifecycleDecodeField1 value 0)
+  body: (if (112 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (lifecycleDecodeField1 value 0)
     | Option.none => 0x696e76616c6964
     | Option.some request => (lifecycleEncodeAnswer (lifecycleJudge request)))),
   axioms: [Quot.sound, propext]

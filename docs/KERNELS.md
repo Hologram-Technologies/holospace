@@ -8,14 +8,14 @@ One request is a kernel word followed by that kernel's fields; `Holospace::dispa
 
 | Word | Module | Theorems |
 |---|---|---|
-| `verdict` | `HolospaceLaunchVerdict` | 5 |
+| `verdict` | `HolospaceLaunchVerdict` | 5 | Resume uses the most recent snapshot | Proved | `lifecycleInv005`: resume is never answered when the snapshot offered is not the latest. `lifecycleInv004`: never without a snapshot. `lifecycleInv014`: the snapshot number never goes back. The body supplies the two numbers; that it supplies them truthfully is tested. |
 | `admission` | `HolospaceAdmission` | 7 |
-| `isolation` | `HolospaceIsolation` | 3 |
+| `isolation` | `HolospaceIsolation` | 3 | Terminated is final | Proved | `lifecycleInv006`: every action in the terminated phase is refused. `lifecycleInv013`: the next phase after terminated is terminated. |
 | `gate` | `HolospaceCapabilityGate` | 16 |
-| `lifecycle` | `HolospaceLifecycle` | 12 |
-| none (not routed) | `HolospaceIdentity` | 3 |
+| `lifecycle` | `HolospaceLifecycle` | 14 |
+| none (not routed) | `HolospaceIdentity` | 4 |
 
-Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 46 theorems with each one's exact axiom set. The same 46 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
+Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 49 theorems with each one's exact axiom set. The same 49 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
 
 Built: the holo at the page above. Its 48 acceptance vectors pass in the template's build, and again when the earlier shell opens the live bytes and asks its own launch verdict kernel (tested). The fingerprint is shown on the page; it changes with every commit, because the holo's provenance names the commit that built it.
 
@@ -23,14 +23,14 @@ Registered claims: six, `HK-01` to `HK-06`, one per module. Each is every theore
 
 Changes from the earlier kernels:
 - Isolation is part of the proved, built app; it no longer needs an unproved interpreter.
-- Lifecycle is one step, not a stateful app: phase, whether a snapshot exists, and the action go in; the answer comes out. The body applies the change each answer means. The earlier theorem "a suspended holospace always has a snapshot" is restated as an invariant every step preserves (`lifecycleInv011`), and resume is proved never to proceed without a snapshot.
+- Lifecycle is one step, not a stateful app: phase, the latest snapshot's number, the number of the snapshot offered for resume, and the action go in; the answer comes out. The body applies the change each answer means. The earlier theorem "a suspended holospace always has a snapshot" is restated as an invariant every step preserves (`lifecycleInv011`), and resume is proved never to proceed without a snapshot.
 - The capability gate carries its full 16 theorems.
 - Every definition carries its kernel's word as a prefix, because the SDK exports all modules into one Rust crate.
 
 Limits:
 - That the routing module sends each word to the right kernel is not a theorem. It is pinned by a test and exercised by the vectors.
 - 48 vectors, not more: the template's LexLean refuses a deeper vector list. Each kernel has eight valid requests covering every answer, and one invalid.
-- Provisioning identity is proved for a stand-in number encoding only, as before, and is not reachable through `dispatch`.
+- Provisioning identity is proved about the 33 bytes that are hashed, read as a number. It is not reachable through `dispatch`, and the hash itself is assumed collision-free.
 - The shell, host and their tests are not in the repository: a template instance refuses non-Prism code. They exist only in a local working copy.
 - prism-code 0.10.1 could not build or publish this app itself; the template wiring (claims, scenarios, tests, page description) was written by a script, by hand.
 
@@ -56,20 +56,20 @@ provisioning-identity: hand-written LexLean in `kernels/provisioning-identity/sr
 
 ## The 22 guarantees against the published app
 
-Phase 1 is closed against this table at `b8a4845` (2026-11-20): the gate passed there with all 46 theorems, and every guarantee below is either proved or explicitly marked. Closing Phase 1 does not mean every guarantee is proved; it means none is left unstated.
+Phase 1 is closed against this table at `b8a4845` (2026-11-20): the gate passed there with all 49 theorems, and every guarantee below is either proved or explicitly marked. Closing Phase 1 does not mean every guarantee is proved; it means none is left unstated.
 
 Status words. Proved: a theorem of the published app, checked by Lean in the template's gate. By construction: true of the model's shape, with no theorem. Tested: a property of the running code, covered by the shell's tests, which are not in this repository. Assumed: taken on trust.
 
 | # | Guarantee | Status | Where |
 |---|---|---|---|
 | 1 | One state at a time | By construction | The request carries one `phase`, one of four values. |
-| 2 | Only the four moves happen | Proved | `lifecycleInv001` to `003`: started, paused and resumed are answered only from the phase each needs. `lifecycleInv009`: terminate is always answered ended unless already terminated. That the body moves to the phase an answer names is tested. |
+| 2 | Only the four moves happen | Proved | `lifecycleInv001` to `003`: started, paused and resumed are answered only from the phase each needs. `lifecycleInv007` to `010`: each allowed move always succeeds. That the body moves to the phase an answer names is tested. |
 | 3 | Terminated is final | Proved | `lifecycleInv005`: every action in the terminated phase is refused. `lifecycleInv012`: the next phase after terminated is terminated. |
-| 4 | An acknowledged suspend has a snapshot | Proved for the model's step | `lifecycleInv010`: whenever the answer is paused, the next state keeps a snapshot. `lifecycleInv011`: if "suspended implies a snapshot" holds before a step, it holds after, so it holds in every state reached from the start. That the body moves to the model's next state is tested. |
+| 4 | An acknowledged suspend has a snapshot | Proved for the model's step | `lifecycleInv011`: a suspend writes a snapshot numbered one above the last. `lifecycleInv012`: if "suspended implies a snapshot" holds before a step, it holds after, so it holds in every state reached from the start. That the body moves to the model's next state is tested. |
 | 5 | Resume uses the most recent snapshot | Proved in part | `lifecycleInv004`: resume is never answered without a snapshot. That it is the most recent one is tested. |
 | 6 | Same state and event, same result | By construction | The judge is a pure function. |
 | 7 | Every durable key derives from the identity | Tested | A property of the body's key function. |
-| 8 | Different identities never share a key | Assumed | Rests on the hash having no collisions. `encodingInjective` proves it for the model encoding only. |
+| 8 | Different identities never share a key | Assumed | Rests on BLAKE3 having no collisions. `encodingInjective` proves the bytes that are hashed differ. |
 | 9 | No read returns another holospace's state | Proved | `isolationInv001`, with identities modelled as numbers. `isolationInv003`: a holospace is never locked out of its own. |
 | 10 | Accepted only if the recomputed hash matches | Proved | `admissionInv001`, `002`: a differing hash is never accepted or re-keyed. |
 | 11 | A mismatch moves to the next source | Proved | `admissionInv007`: a mismatch with a source left always answers retry. `admissionInv005`: never retry with none left. |
@@ -82,10 +82,10 @@ Status words. Proved: a theorem of the published app, checked by Lean in the tem
 | 18 | A deny wins over a grant | Proved | `gateInv003`. |
 | 19 | Network only under an explicit grant | Proved | `gateInv004`, `005`. |
 | 20 | A connection through an extension or node is labelled not serverless | Proved in part | `gateInv006`, `007`: such a request is never answered allow, so one that proceeds is answered relayed. That the shell shows the label is tested. |
-| 21 | Same definition, same identity, on any device | Proved for the model | `sameGivesSame`, for a stand-in number encoding. The real byte encoding and "any device" are tested. |
-| 22 | The architecture is part of the identity | Proved for the model | `archChangesIdentity`, `encodingInjective`, same stand-in encoding. The real encoding is tested. |
+| 21 | Same definition, same identity, on any device | Proved for the bytes hashed | `sameGivesSame`: the same architecture and definition digest give the same 33 bytes. Canonicalising the definition, and "any device", are tested. |
+| 22 | The architecture is part of the identity | Proved for the bytes hashed | `archChangesIdentity`, `encodingInjective`, `preimageFits`: the identity is BLAKE3 of one architecture byte followed by the 32-byte digest of the canonical definition; a different architecture or digest always gives different bytes, and they always fit in 33. |
 
-Count: 12 proved outright, 2 proved in part, 3 proved for the model (4, 21, 22), 2 by construction, 2 tested only, 1 assumed. Guarantees 7 and 16 cannot become theorems of this app: they are about what the body does. The lifecycle model defines the next phase and next snapshot of every step (`lifecycleNextPhase`, `lifecycleNextSnapshot`); the app still answers with one word, and the body is expected to move to exactly that next state.
+Count: 13 proved outright, 1 proved in part (20), 3 proved for the model or the bytes hashed (4, 21, 22), 2 by construction, 2 tested only, 1 assumed. Guarantees 7 and 16 cannot become theorems of this app: they are about what the body does. The lifecycle model defines the next phase and next snapshot number of every step (`lifecycleNextPhase`, `lifecycleNextSaved`); the app still answers with one word, and the body is expected to move to exactly that next state. The lifecycle and identity wording was approved on 2026-11-20.
 
 ## Limits
 

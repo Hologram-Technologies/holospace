@@ -89,10 +89,10 @@ statement = "Nothing is allowed without a grant, a denied request is always deni
 id = "HK-05"
 level = "build"
 suite = "holospace"
-statement = "Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate"
+statement = "Start, suspend and resume are answered only in the phase each needs, resume only with the latest snapshot, and nothing follows terminate"
 
 [[id]]
 id = "HK-06"
 level = "build"
 suite = "holospace"
-statement = "The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one"
+statement = "The same architecture and definition digest give the same identity bytes, and a different architecture or digest always gives different ones"

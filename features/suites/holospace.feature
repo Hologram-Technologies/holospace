@@ -33,14 +33,14 @@ Feature: holospace
     And requests that begin with gate are answered by HolospaceCapabilityGate
 
   @HK-05 @build
-  Scenario: Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate
+  Scenario: Start, suspend and resume are answered only in the phase each needs, resume only with the latest snapshot, and nothing follows terminate
     Given the model in app/src/HolospaceLifecycleProofs.lex.tex
-    When the Lean kernel checks its 12 theorems during prismpm verify
+    When the Lean kernel checks its 14 theorems during prismpm verify
     Then no request meets any condition holospace.pins.tsv lists for lifecycle
     And requests that begin with lifecycle are answered by HolospaceLifecycle
 
   @HK-06 @build
-  Scenario: The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one
+  Scenario: The same architecture and definition digest give the same identity bytes, and a different architecture or digest always gives different ones
     Given the model in app/src/HolospaceIdentity.lex.tex
-    When the Lean kernel checks its 3 theorems during prismpm verify
+    When the Lean kernel checks its 4 theorems during prismpm verify
     Then no request meets any condition holospace.pins.tsv lists for identity

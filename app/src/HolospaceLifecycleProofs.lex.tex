@@ -9,7 +9,7 @@ definition{
   name: lifecycleBreaksInv001,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseProvisioned)))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerStarted)))
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseProvisioned)))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerStarted)))
 }
 
 theorem{
@@ -36,8 +36,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv001
     ]
   },
@@ -48,7 +46,7 @@ definition{
   name: lifecycleBreaksInv002,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseRunning)))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerPaused)))
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseRunning)))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerPaused)))
 }
 
 theorem{
@@ -75,8 +73,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv002
     ]
   },
@@ -87,7 +83,7 @@ definition{
   name: lifecycleBreaksInv003,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseSuspended)))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerResumed)))
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseSuspended)))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerResumed)))
 }
 
 theorem{
@@ -114,8 +110,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv003
     ]
   },
@@ -126,7 +120,7 @@ definition{
   name: lifecycleBreaksInv004,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request snapshot) =? (HolospaceLifecycle::lifecycleSnapshotNone))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerResumed)))
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((project request saved) =? 0)) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerResumed)))
 }
 
 theorem{
@@ -153,8 +147,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv004
     ]
   },
@@ -165,7 +157,7 @@ definition{
   name: lifecycleBreaksInv005,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseTerminated))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerRefused))))
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && (not ((project request chosen) =? (project request saved)))) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerResumed)))
 }
 
 theorem{
@@ -192,8 +184,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv005
     ]
   },
@@ -204,7 +194,7 @@ definition{
   name: lifecycleBreaksInv006,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: (((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseProvisioned))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionStart))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerStarted))))
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseTerminated))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerRefused))))
 }
 
 theorem{
@@ -231,19 +221,17 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv006
     ]
   },
-  axioms: [Classical.choice, Quot.sound, propext]
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: lifecycleBreaksInv007,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: (((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseRunning))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionSuspend))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerPaused))))
+  body: ((((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseProvisioned))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionStart))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerStarted))))
 }
 
 theorem{
@@ -270,8 +258,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv007
     ]
   },
@@ -282,7 +268,7 @@ definition{
   name: lifecycleBreaksInv008,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseSuspended))) && ((project request snapshot) =? (HolospaceLifecycle::lifecycleSnapshotKept))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionResume))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerResumed))))
+  body: (((((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseRunning))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionSuspend))) && ((project request saved) <? 1000000)) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerPaused))))
 }
 
 theorem{
@@ -309,8 +295,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv008
     ]
   },
@@ -321,7 +305,7 @@ definition{
   name: lifecycleBreaksInv009,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: (((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseTerminated)))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionTerminate))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerEnded))))
+  body: ((((((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseSuspended))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionResume))) && (0 <? (project request saved))) && ((project request chosen) =? (project request saved))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerResumed))))
 }
 
 theorem{
@@ -348,8 +332,6 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv009
     ]
   },
@@ -360,7 +342,7 @@ definition{
   name: lifecycleBreaksInv010,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerPaused))) && (not ((HolospaceLifecycle::lifecycleNextSnapshot request) =? (HolospaceLifecycle::lifecycleSnapshotKept))))
+  body: ((((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseTerminated)))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionTerminate))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerEnded))))
 }
 
 theorem{
@@ -379,8 +361,6 @@ theorem{
       HolospaceLifecycle::lifecycleAnswerResumed,
       HolospaceLifecycle::lifecycleAnswerStarted,
       HolospaceLifecycle::lifecycleJudge,
-      HolospaceLifecycle::lifecycleNextPhase,
-      HolospaceLifecycle::lifecycleNextSnapshot,
       HolospaceLifecycle::lifecyclePhaseProvisioned,
       HolospaceLifecycle::lifecyclePhaseRunning,
       HolospaceLifecycle::lifecyclePhaseSuspended,
@@ -389,19 +369,17 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv010
     ]
   },
-  axioms: [Quot.sound, propext]
+  axioms: [Classical.choice, Quot.sound, propext]
 }
 
 definition{
   name: lifecycleBreaksInv011,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: (((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not (((project request phase) =? (HolospaceLifecycle::lifecyclePhaseSuspended)) && ((project request snapshot) =? (HolospaceLifecycle::lifecycleSnapshotNone))))) && ((HolospaceLifecycle::lifecycleNextPhase request) =? (HolospaceLifecycle::lifecyclePhaseSuspended))) && ((HolospaceLifecycle::lifecycleNextSnapshot request) =? (HolospaceLifecycle::lifecycleSnapshotNone)))
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerPaused))) && (not ((HolospaceLifecycle::lifecycleNextSaved request) =? ((project request saved) + 1))))
 }
 
 theorem{
@@ -421,7 +399,7 @@ theorem{
       HolospaceLifecycle::lifecycleAnswerStarted,
       HolospaceLifecycle::lifecycleJudge,
       HolospaceLifecycle::lifecycleNextPhase,
-      HolospaceLifecycle::lifecycleNextSnapshot,
+      HolospaceLifecycle::lifecycleNextSaved,
       HolospaceLifecycle::lifecyclePhaseProvisioned,
       HolospaceLifecycle::lifecyclePhaseRunning,
       HolospaceLifecycle::lifecyclePhaseSuspended,
@@ -430,19 +408,17 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv011
     ]
   },
-  axioms: [Classical.choice, Quot.sound, propext]
+  axioms: [Quot.sound, propext]
 }
 
 definition{
   name: lifecycleBreaksInv012,
   parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
-  body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseTerminated))) && (not ((HolospaceLifecycle::lifecycleNextPhase request) =? (HolospaceLifecycle::lifecyclePhaseTerminated))))
+  body: ((((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && (not (((project request phase) =? (HolospaceLifecycle::lifecyclePhaseSuspended)) && ((project request saved) =? 0)))) && ((HolospaceLifecycle::lifecycleNextPhase request) =? (HolospaceLifecycle::lifecyclePhaseSuspended))) && ((HolospaceLifecycle::lifecycleNextSaved request) =? 0))
 }
 
 theorem{
@@ -462,7 +438,7 @@ theorem{
       HolospaceLifecycle::lifecycleAnswerStarted,
       HolospaceLifecycle::lifecycleJudge,
       HolospaceLifecycle::lifecycleNextPhase,
-      HolospaceLifecycle::lifecycleNextSnapshot,
+      HolospaceLifecycle::lifecycleNextSaved,
       HolospaceLifecycle::lifecyclePhaseProvisioned,
       HolospaceLifecycle::lifecyclePhaseRunning,
       HolospaceLifecycle::lifecyclePhaseSuspended,
@@ -471,12 +447,88 @@ theorem{
       HolospaceLifecycle::lifecycleRule2,
       HolospaceLifecycle::lifecycleRule3,
       HolospaceLifecycle::lifecycleRule4,
-      HolospaceLifecycle::lifecycleSnapshotKept,
-      HolospaceLifecycle::lifecycleSnapshotNone,
       lifecycleBreaksInv012
     ]
   },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+
+definition{
+  name: lifecycleBreaksInv013,
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
+  result: Bool,
+  body: (((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseTerminated))) && (not ((HolospaceLifecycle::lifecycleNextPhase request) =? (HolospaceLifecycle::lifecyclePhaseTerminated))))
+}
+
+theorem{
+  name: lifecycleInv013Holds,
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
+  statement: ((lifecycleBreaksInv013 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceLifecycle::lifecycleActionResume,
+      HolospaceLifecycle::lifecycleActionStart,
+      HolospaceLifecycle::lifecycleActionSuspend,
+      HolospaceLifecycle::lifecycleActionTerminate,
+      HolospaceLifecycle::lifecycleAnswerEnded,
+      HolospaceLifecycle::lifecycleAnswerPaused,
+      HolospaceLifecycle::lifecycleAnswerRefused,
+      HolospaceLifecycle::lifecycleAnswerResumed,
+      HolospaceLifecycle::lifecycleAnswerStarted,
+      HolospaceLifecycle::lifecycleJudge,
+      HolospaceLifecycle::lifecycleNextPhase,
+      HolospaceLifecycle::lifecycleNextSaved,
+      HolospaceLifecycle::lifecyclePhaseProvisioned,
+      HolospaceLifecycle::lifecyclePhaseRunning,
+      HolospaceLifecycle::lifecyclePhaseSuspended,
+      HolospaceLifecycle::lifecyclePhaseTerminated,
+      HolospaceLifecycle::lifecycleRule1,
+      HolospaceLifecycle::lifecycleRule2,
+      HolospaceLifecycle::lifecycleRule3,
+      HolospaceLifecycle::lifecycleRule4,
+      lifecycleBreaksInv013
+    ]
+  },
   axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: lifecycleBreaksInv014,
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
+  result: Bool,
+  body: ((((((project request phase) <? 4) && ((project request saved) <=? 1000000)) && ((project request chosen) <=? 1000000)) && ((project request action) <? 4)) && ((HolospaceLifecycle::lifecycleNextSaved request) <? (project request saved)))
+}
+
+theorem{
+  name: lifecycleInv014Holds,
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
+  statement: ((lifecycleBreaksInv014 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceLifecycle::lifecycleActionResume,
+      HolospaceLifecycle::lifecycleActionStart,
+      HolospaceLifecycle::lifecycleActionSuspend,
+      HolospaceLifecycle::lifecycleActionTerminate,
+      HolospaceLifecycle::lifecycleAnswerEnded,
+      HolospaceLifecycle::lifecycleAnswerPaused,
+      HolospaceLifecycle::lifecycleAnswerRefused,
+      HolospaceLifecycle::lifecycleAnswerResumed,
+      HolospaceLifecycle::lifecycleAnswerStarted,
+      HolospaceLifecycle::lifecycleJudge,
+      HolospaceLifecycle::lifecycleNextPhase,
+      HolospaceLifecycle::lifecycleNextSaved,
+      HolospaceLifecycle::lifecyclePhaseProvisioned,
+      HolospaceLifecycle::lifecyclePhaseRunning,
+      HolospaceLifecycle::lifecyclePhaseSuspended,
+      HolospaceLifecycle::lifecyclePhaseTerminated,
+      HolospaceLifecycle::lifecycleRule1,
+      HolospaceLifecycle::lifecycleRule2,
+      HolospaceLifecycle::lifecycleRule3,
+      HolospaceLifecycle::lifecycleRule4,
+      lifecycleBreaksInv014
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
 }
 \end{semanticmodule}
 \end{lexlean}
