@@ -6,35 +6,35 @@
 \importmodule{Foundation.View.Text.V1.Model}
 \title{Text application model}
 \begin{semanticmodule}
-definition{name: phaseProvisioned, parameters: [], result: Nat, body: 0}
+definition{name: lifecyclePhaseProvisioned, parameters: [], result: Nat, body: 0}
 
-definition{name: phaseRunning, parameters: [], result: Nat, body: 1}
+definition{name: lifecyclePhaseRunning, parameters: [], result: Nat, body: 1}
 
-definition{name: phaseSuspended, parameters: [], result: Nat, body: 2}
+definition{name: lifecyclePhaseSuspended, parameters: [], result: Nat, body: 2}
 
-definition{name: phaseTerminated, parameters: [], result: Nat, body: 3}
+definition{name: lifecyclePhaseTerminated, parameters: [], result: Nat, body: 3}
 
-definition{name: snapshotNone, parameters: [], result: Nat, body: 0}
+definition{name: lifecycleSnapshotNone, parameters: [], result: Nat, body: 0}
 
-definition{name: snapshotKept, parameters: [], result: Nat, body: 1}
+definition{name: lifecycleSnapshotKept, parameters: [], result: Nat, body: 1}
 
-definition{name: actionStart, parameters: [], result: Nat, body: 0}
+definition{name: lifecycleActionStart, parameters: [], result: Nat, body: 0}
 
-definition{name: actionSuspend, parameters: [], result: Nat, body: 1}
+definition{name: lifecycleActionSuspend, parameters: [], result: Nat, body: 1}
 
-definition{name: actionResume, parameters: [], result: Nat, body: 2}
+definition{name: lifecycleActionResume, parameters: [], result: Nat, body: 2}
 
-definition{name: actionTerminate, parameters: [], result: Nat, body: 3}
+definition{name: lifecycleActionTerminate, parameters: [], result: Nat, body: 3}
 
-definition{name: answerStarted, parameters: [], result: Nat, body: 0}
+definition{name: lifecycleAnswerStarted, parameters: [], result: Nat, body: 0}
 
-definition{name: answerPaused, parameters: [], result: Nat, body: 1}
+definition{name: lifecycleAnswerPaused, parameters: [], result: Nat, body: 1}
 
-definition{name: answerResumed, parameters: [], result: Nat, body: 2}
+definition{name: lifecycleAnswerResumed, parameters: [], result: Nat, body: 2}
 
-definition{name: answerEnded, parameters: [], result: Nat, body: 3}
+definition{name: lifecycleAnswerEnded, parameters: [], result: Nat, body: 3}
 
-definition{name: answerRefused, parameters: [], result: Nat, body: 4}
+definition{name: lifecycleAnswerRefused, parameters: [], result: Nat, body: 4}
 
 structure{
   name: LifecycleRequest,
@@ -44,7 +44,7 @@ structure{
 }
 
 definition{
-  name: byteAt,
+  name: lifecycleByteAt,
   parameters: [s : Bytes, i : Nat],
   result: (Option Nat),
   body: (match (prim index s i : (Option UInt8))
@@ -54,59 +54,59 @@ definition{
 }
 
 definition{
-  name: digitsValue,
+  name: lifecycleDigitsValue,
   parameters: [s : Bytes, i : Nat, acc : Nat, fuel : Nat],
   result: (Option Nat),
   body: (match fuel
     | Nat.zero => (ctor Option.some [Nat] acc)
-    | Nat.succ rest => (match (byteAt s i)
+    | Nat.succ rest => (match (lifecycleByteAt s i)
       | Option.none => (ctor Option.none [Nat])
-      | Option.some d => (if ((d <? 48) || (57 <? d)) then (ctor Option.none [Nat]) else (digitsValue s (i + 1) ((prim multiply acc 10 : Nat) + (prim subtract d 48 : Nat)) rest)))),
+      | Option.some d => (if ((d <? 48) || (57 <? d)) then (ctor Option.none [Nat]) else (lifecycleDigitsValue s (i + 1) ((prim multiply acc 10 : Nat) + (prim subtract d 48 : Nat)) rest)))),
   axioms: [Quot.sound, propext],
   recursive_argument: fuel
 }
 
 definition{
-  name: parseDigits,
+  name: lifecycleParseDigits,
   parameters: [s : Bytes],
   result: (Option Nat),
-  body: (if ((Foundation.Bytes::byteLength s) =? 0) then (ctor Option.none [Nat]) else (if (18 <? (Foundation.Bytes::byteLength s)) then (ctor Option.none [Nat]) else (match (byteAt s 0)
+  body: (if ((Foundation.Bytes::byteLength s) =? 0) then (ctor Option.none [Nat]) else (if (18 <? (Foundation.Bytes::byteLength s)) then (ctor Option.none [Nat]) else (match (lifecycleByteAt s 0)
     | Option.none => (ctor Option.none [Nat])
-    | Option.some lead => (if ((lead =? 48) && (1 <? (Foundation.Bytes::byteLength s))) then (ctor Option.none [Nat]) else (digitsValue s 0 0 (Foundation.Bytes::byteLength s)))))),
+    | Option.some lead => (if ((lead =? 48) && (1 <? (Foundation.Bytes::byteLength s))) then (ctor Option.none [Nat]) else (lifecycleDigitsValue s 0 0 (Foundation.Bytes::byteLength s)))))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: parseNumber,
+  name: lifecycleParseNumber,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (parseDigits value),
+  body: (lifecycleParseDigits value),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: parsePhase,
+  name: lifecycleParsePhase,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x70726f766973696f6e6564 : Bool) then (ctor Option.some [Nat] (phaseProvisioned)) else (if (prim equal value 0x72756e6e696e67 : Bool) then (ctor Option.some [Nat] (phaseRunning)) else (if (prim equal value 0x73757370656e646564 : Bool) then (ctor Option.some [Nat] (phaseSuspended)) else (if (prim equal value 0x7465726d696e61746564 : Bool) then (ctor Option.some [Nat] (phaseTerminated)) else (ctor Option.none [Nat])))))
+  body: (if (prim equal value 0x70726f766973696f6e6564 : Bool) then (ctor Option.some [Nat] (lifecyclePhaseProvisioned)) else (if (prim equal value 0x72756e6e696e67 : Bool) then (ctor Option.some [Nat] (lifecyclePhaseRunning)) else (if (prim equal value 0x73757370656e646564 : Bool) then (ctor Option.some [Nat] (lifecyclePhaseSuspended)) else (if (prim equal value 0x7465726d696e61746564 : Bool) then (ctor Option.some [Nat] (lifecyclePhaseTerminated)) else (ctor Option.none [Nat])))))
 }
 
 definition{
-  name: parseSnapshot,
+  name: lifecycleParseSnapshot,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6e6f6e65 : Bool) then (ctor Option.some [Nat] (snapshotNone)) else (if (prim equal value 0x6b657074 : Bool) then (ctor Option.some [Nat] (snapshotKept)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6e6f6e65 : Bool) then (ctor Option.some [Nat] (lifecycleSnapshotNone)) else (if (prim equal value 0x6b657074 : Bool) then (ctor Option.some [Nat] (lifecycleSnapshotKept)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseAction,
+  name: lifecycleParseAction,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x7374617274 : Bool) then (ctor Option.some [Nat] (actionStart)) else (if (prim equal value 0x73757370656e64 : Bool) then (ctor Option.some [Nat] (actionSuspend)) else (if (prim equal value 0x726573756d65 : Bool) then (ctor Option.some [Nat] (actionResume)) else (if (prim equal value 0x7465726d696e617465 : Bool) then (ctor Option.some [Nat] (actionTerminate)) else (ctor Option.none [Nat])))))
+  body: (if (prim equal value 0x7374617274 : Bool) then (ctor Option.some [Nat] (lifecycleActionStart)) else (if (prim equal value 0x73757370656e64 : Bool) then (ctor Option.some [Nat] (lifecycleActionSuspend)) else (if (prim equal value 0x726573756d65 : Bool) then (ctor Option.some [Nat] (lifecycleActionResume)) else (if (prim equal value 0x7465726d696e617465 : Bool) then (ctor Option.some [Nat] (lifecycleActionTerminate)) else (ctor Option.none [Nat])))))
 }
 
 definition{
-  name: sliceOf,
+  name: lifecycleSliceOf,
   parameters: [s : Bytes, start : Nat, count : Nat],
   result: Bytes,
   body: (match (prim slice s start count : (Option Bytes))
@@ -115,97 +115,97 @@ definition{
 }
 
 definition{
-  name: fieldEnd,
+  name: lifecycleFieldEnd,
   parameters: [s : Bytes, i : Nat, fuel : Nat],
   result: Nat,
   body: (match fuel
     | Nat.zero => i
-    | Nat.succ rest => (match (byteAt s i)
+    | Nat.succ rest => (match (lifecycleByteAt s i)
       | Option.none => i
-      | Option.some d => (if (d =? 32) then i else (fieldEnd s (i + 1) rest)))),
+      | Option.some d => (if (d =? 32) then i else (lifecycleFieldEnd s (i + 1) rest)))),
   axioms: [Quot.sound, propext],
   recursive_argument: fuel
 }
 
 definition{
-  name: decodeField3,
+  name: lifecycleDecodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
   result: (Option LifecycleRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseAction (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (lifecycleFieldEnd s start (Foundation.Bytes::byteLength s)); (match (lifecycleParseAction (lifecycleSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [LifecycleRequest])
     | Option.some v3 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [LifecycleRequest] (record LifecycleRequest {phase := v1, snapshot := v2, action := v3})) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField2,
+  name: lifecycleDecodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
   result: (Option LifecycleRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseSnapshot (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (lifecycleFieldEnd s start (Foundation.Bytes::byteLength s)); (match (lifecycleParseSnapshot (lifecycleSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [LifecycleRequest])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [LifecycleRequest])))),
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (lifecycleDecodeField3 s (e + 1) v1 v2) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField1,
+  name: lifecycleDecodeField1,
   parameters: [s : Bytes, start : Nat],
   result: (Option LifecycleRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parsePhase (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (lifecycleFieldEnd s start (Foundation.Bytes::byteLength s)); (match (lifecycleParsePhase (lifecycleSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [LifecycleRequest])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [LifecycleRequest])))),
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (lifecycleDecodeField2 s (e + 1) v1) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: rule1,
+  name: lifecycleRule1,
   parameters: [request : LifecycleRequest],
   result: Bool,
-  body: (((project request phase) =? (phaseProvisioned)) && ((project request action) =? (actionStart)))
+  body: (((project request phase) =? (lifecyclePhaseProvisioned)) && ((project request action) =? (lifecycleActionStart)))
 }
 
 definition{
-  name: rule2,
+  name: lifecycleRule2,
   parameters: [request : LifecycleRequest],
   result: Bool,
-  body: (((project request phase) =? (phaseRunning)) && ((project request action) =? (actionSuspend)))
+  body: (((project request phase) =? (lifecyclePhaseRunning)) && ((project request action) =? (lifecycleActionSuspend)))
 }
 
 definition{
-  name: rule3,
+  name: lifecycleRule3,
   parameters: [request : LifecycleRequest],
   result: Bool,
-  body: ((((project request phase) =? (phaseSuspended)) && ((project request snapshot) =? (snapshotKept))) && ((project request action) =? (actionResume)))
+  body: ((((project request phase) =? (lifecyclePhaseSuspended)) && ((project request snapshot) =? (lifecycleSnapshotKept))) && ((project request action) =? (lifecycleActionResume)))
 }
 
 definition{
-  name: rule4,
+  name: lifecycleRule4,
   parameters: [request : LifecycleRequest],
   result: Bool,
-  body: ((not ((project request phase) =? (phaseTerminated))) && ((project request action) =? (actionTerminate)))
+  body: ((not ((project request phase) =? (lifecyclePhaseTerminated))) && ((project request action) =? (lifecycleActionTerminate)))
 }
 
 definition{
-  name: judge,
+  name: lifecycleJudge,
   parameters: [request : LifecycleRequest],
   result: Nat,
-  body: (if (rule1 request) then (answerStarted) else (if (rule2 request) then (answerPaused) else (if (rule3 request) then (answerResumed) else (if (rule4 request) then (answerEnded) else (answerRefused)))))
+  body: (if (lifecycleRule1 request) then (lifecycleAnswerStarted) else (if (lifecycleRule2 request) then (lifecycleAnswerPaused) else (if (lifecycleRule3 request) then (lifecycleAnswerResumed) else (if (lifecycleRule4 request) then (lifecycleAnswerEnded) else (lifecycleAnswerRefused)))))
 }
 
 definition{
-  name: encodeAnswer,
+  name: lifecycleEncodeAnswer,
   parameters: [code : Nat],
   result: Bytes,
-  body: (if (code =? (answerStarted)) then 0x73746172746564 else (if (code =? (answerPaused)) then 0x706175736564 else (if (code =? (answerResumed)) then 0x726573756d6564 else (if (code =? (answerEnded)) then 0x656e646564 else (if (code =? (answerRefused)) then 0x72656675736564 else 0x696e76616c6964)))))
+  body: (if (code =? (lifecycleAnswerStarted)) then 0x73746172746564 else (if (code =? (lifecycleAnswerPaused)) then 0x706175736564 else (if (code =? (lifecycleAnswerResumed)) then 0x726573756d6564 else (if (code =? (lifecycleAnswerEnded)) then 0x656e646564 else (if (code =? (lifecycleAnswerRefused)) then 0x72656675736564 else 0x696e76616c6964)))))
 }
 
 definition{
-  name: dispatch,
+  name: lifecycleDispatch,
   parameters: [value : Bytes],
   result: Bytes,
-  body: (if (88 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (decodeField1 value 0)
+  body: (if (88 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (lifecycleDecodeField1 value 0)
     | Option.none => 0x696e76616c6964
-    | Option.some request => (encodeAnswer (judge request)))),
+    | Option.some request => (lifecycleEncodeAnswer (lifecycleJudge request)))),
   axioms: [Quot.sound, propext]
 }
 \end{semanticmodule}

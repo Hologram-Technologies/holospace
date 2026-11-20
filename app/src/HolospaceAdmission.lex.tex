@@ -6,29 +6,29 @@
 \importmodule{Foundation.View.Text.V1.Model}
 \title{Text application model}
 \begin{semanticmodule}
-definition{name: labelMatches, parameters: [], result: Nat, body: 0}
+definition{name: admissionLabelMatches, parameters: [], result: Nat, body: 0}
 
-definition{name: labelDiffers, parameters: [], result: Nat, body: 1}
+definition{name: admissionLabelDiffers, parameters: [], result: Nat, body: 1}
 
-definition{name: axisBlake3, parameters: [], result: Nat, body: 0}
+definition{name: admissionAxisBlake3, parameters: [], result: Nat, body: 0}
 
-definition{name: axisSha256, parameters: [], result: Nat, body: 1}
+definition{name: admissionAxisSha256, parameters: [], result: Nat, body: 1}
 
-definition{name: stageImport, parameters: [], result: Nat, body: 0}
+definition{name: admissionStageImport, parameters: [], result: Nat, body: 0}
 
-definition{name: stageRuntime, parameters: [], result: Nat, body: 1}
+definition{name: admissionStageRuntime, parameters: [], result: Nat, body: 1}
 
-definition{name: sourcesMore, parameters: [], result: Nat, body: 0}
+definition{name: admissionSourcesMore, parameters: [], result: Nat, body: 0}
 
-definition{name: sourcesNone, parameters: [], result: Nat, body: 1}
+definition{name: admissionSourcesNone, parameters: [], result: Nat, body: 1}
 
-definition{name: answerAccept, parameters: [], result: Nat, body: 0}
+definition{name: admissionAnswerAccept, parameters: [], result: Nat, body: 0}
 
-definition{name: answerRekey, parameters: [], result: Nat, body: 1}
+definition{name: admissionAnswerRekey, parameters: [], result: Nat, body: 1}
 
-definition{name: answerRetry, parameters: [], result: Nat, body: 2}
+definition{name: admissionAnswerRetry, parameters: [], result: Nat, body: 2}
 
-definition{name: answerReject, parameters: [], result: Nat, body: 3}
+definition{name: admissionAnswerReject, parameters: [], result: Nat, body: 3}
 
 structure{
   name: AdmissionRequest,
@@ -43,7 +43,7 @@ structure{
 }
 
 definition{
-  name: byteAt,
+  name: admissionByteAt,
   parameters: [s : Bytes, i : Nat],
   result: (Option Nat),
   body: (match (prim index s i : (Option UInt8))
@@ -53,66 +53,66 @@ definition{
 }
 
 definition{
-  name: digitsValue,
+  name: admissionDigitsValue,
   parameters: [s : Bytes, i : Nat, acc : Nat, fuel : Nat],
   result: (Option Nat),
   body: (match fuel
     | Nat.zero => (ctor Option.some [Nat] acc)
-    | Nat.succ rest => (match (byteAt s i)
+    | Nat.succ rest => (match (admissionByteAt s i)
       | Option.none => (ctor Option.none [Nat])
-      | Option.some d => (if ((d <? 48) || (57 <? d)) then (ctor Option.none [Nat]) else (digitsValue s (i + 1) ((prim multiply acc 10 : Nat) + (prim subtract d 48 : Nat)) rest)))),
+      | Option.some d => (if ((d <? 48) || (57 <? d)) then (ctor Option.none [Nat]) else (admissionDigitsValue s (i + 1) ((prim multiply acc 10 : Nat) + (prim subtract d 48 : Nat)) rest)))),
   axioms: [Quot.sound, propext],
   recursive_argument: fuel
 }
 
 definition{
-  name: parseDigits,
+  name: admissionParseDigits,
   parameters: [s : Bytes],
   result: (Option Nat),
-  body: (if ((Foundation.Bytes::byteLength s) =? 0) then (ctor Option.none [Nat]) else (if (18 <? (Foundation.Bytes::byteLength s)) then (ctor Option.none [Nat]) else (match (byteAt s 0)
+  body: (if ((Foundation.Bytes::byteLength s) =? 0) then (ctor Option.none [Nat]) else (if (18 <? (Foundation.Bytes::byteLength s)) then (ctor Option.none [Nat]) else (match (admissionByteAt s 0)
     | Option.none => (ctor Option.none [Nat])
-    | Option.some lead => (if ((lead =? 48) && (1 <? (Foundation.Bytes::byteLength s))) then (ctor Option.none [Nat]) else (digitsValue s 0 0 (Foundation.Bytes::byteLength s)))))),
+    | Option.some lead => (if ((lead =? 48) && (1 <? (Foundation.Bytes::byteLength s))) then (ctor Option.none [Nat]) else (admissionDigitsValue s 0 0 (Foundation.Bytes::byteLength s)))))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: parseNumber,
+  name: admissionParseNumber,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (parseDigits value),
+  body: (admissionParseDigits value),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: parseLabel,
+  name: admissionParseLabel,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6d617463686573 : Bool) then (ctor Option.some [Nat] (labelMatches)) else (if (prim equal value 0x64696666657273 : Bool) then (ctor Option.some [Nat] (labelDiffers)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6d617463686573 : Bool) then (ctor Option.some [Nat] (admissionLabelMatches)) else (if (prim equal value 0x64696666657273 : Bool) then (ctor Option.some [Nat] (admissionLabelDiffers)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseAxis,
+  name: admissionParseAxis,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x626c616b6533 : Bool) then (ctor Option.some [Nat] (axisBlake3)) else (if (prim equal value 0x736861323536 : Bool) then (ctor Option.some [Nat] (axisSha256)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x626c616b6533 : Bool) then (ctor Option.some [Nat] (admissionAxisBlake3)) else (if (prim equal value 0x736861323536 : Bool) then (ctor Option.some [Nat] (admissionAxisSha256)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseStage,
+  name: admissionParseStage,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x696d706f7274 : Bool) then (ctor Option.some [Nat] (stageImport)) else (if (prim equal value 0x72756e74696d65 : Bool) then (ctor Option.some [Nat] (stageRuntime)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x696d706f7274 : Bool) then (ctor Option.some [Nat] (admissionStageImport)) else (if (prim equal value 0x72756e74696d65 : Bool) then (ctor Option.some [Nat] (admissionStageRuntime)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseSources,
+  name: admissionParseSources,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6d6f7265 : Bool) then (ctor Option.some [Nat] (sourcesMore)) else (if (prim equal value 0x6e6f6e65 : Bool) then (ctor Option.some [Nat] (sourcesNone)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6d6f7265 : Bool) then (ctor Option.some [Nat] (admissionSourcesMore)) else (if (prim equal value 0x6e6f6e65 : Bool) then (ctor Option.some [Nat] (admissionSourcesNone)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: sliceOf,
+  name: admissionSliceOf,
   parameters: [s : Bytes, start : Nat, count : Nat],
   result: Bytes,
   body: (match (prim slice s start count : (Option Bytes))
@@ -121,100 +121,100 @@ definition{
 }
 
 definition{
-  name: fieldEnd,
+  name: admissionFieldEnd,
   parameters: [s : Bytes, i : Nat, fuel : Nat],
   result: Nat,
   body: (match fuel
     | Nat.zero => i
-    | Nat.succ rest => (match (byteAt s i)
+    | Nat.succ rest => (match (admissionByteAt s i)
       | Option.none => i
-      | Option.some d => (if (d =? 32) then i else (fieldEnd s (i + 1) rest)))),
+      | Option.some d => (if (d =? 32) then i else (admissionFieldEnd s (i + 1) rest)))),
   axioms: [Quot.sound, propext],
   recursive_argument: fuel
 }
 
 definition{
-  name: decodeField4,
+  name: admissionDecodeField4,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
   result: (Option AdmissionRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseSources (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (admissionFieldEnd s start (Foundation.Bytes::byteLength s)); (match (admissionParseSources (admissionSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [AdmissionRequest])
     | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [AdmissionRequest] (record AdmissionRequest {label := v1, axis := v2, stage := v3, sources := v4})) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField3,
+  name: admissionDecodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
   result: (Option AdmissionRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseStage (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (admissionFieldEnd s start (Foundation.Bytes::byteLength s)); (match (admissionParseStage (admissionSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [AdmissionRequest])
-    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [AdmissionRequest])))),
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (admissionDecodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField2,
+  name: admissionDecodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
   result: (Option AdmissionRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseAxis (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (admissionFieldEnd s start (Foundation.Bytes::byteLength s)); (match (admissionParseAxis (admissionSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [AdmissionRequest])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [AdmissionRequest])))),
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (admissionDecodeField3 s (e + 1) v1 v2) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField1,
+  name: admissionDecodeField1,
   parameters: [s : Bytes, start : Nat],
   result: (Option AdmissionRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseLabel (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (admissionFieldEnd s start (Foundation.Bytes::byteLength s)); (match (admissionParseLabel (admissionSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [AdmissionRequest])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [AdmissionRequest])))),
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (admissionDecodeField2 s (e + 1) v1) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: rule1,
+  name: admissionRule1,
   parameters: [request : AdmissionRequest],
   result: Bool,
-  body: (((project request label) =? (labelMatches)) && ((project request axis) =? (axisBlake3)))
+  body: (((project request label) =? (admissionLabelMatches)) && ((project request axis) =? (admissionAxisBlake3)))
 }
 
 definition{
-  name: rule2,
+  name: admissionRule2,
   parameters: [request : AdmissionRequest],
   result: Bool,
-  body: ((((project request label) =? (labelMatches)) && ((project request axis) =? (axisSha256))) && ((project request stage) =? (stageImport)))
+  body: ((((project request label) =? (admissionLabelMatches)) && ((project request axis) =? (admissionAxisSha256))) && ((project request stage) =? (admissionStageImport)))
 }
 
 definition{
-  name: rule3,
+  name: admissionRule3,
   parameters: [request : AdmissionRequest],
   result: Bool,
-  body: (((project request label) =? (labelDiffers)) && ((project request sources) =? (sourcesMore)))
+  body: (((project request label) =? (admissionLabelDiffers)) && ((project request sources) =? (admissionSourcesMore)))
 }
 
 definition{
-  name: judge,
+  name: admissionJudge,
   parameters: [request : AdmissionRequest],
   result: Nat,
-  body: (if (rule1 request) then (answerAccept) else (if (rule2 request) then (answerRekey) else (if (rule3 request) then (answerRetry) else (answerReject))))
+  body: (if (admissionRule1 request) then (admissionAnswerAccept) else (if (admissionRule2 request) then (admissionAnswerRekey) else (if (admissionRule3 request) then (admissionAnswerRetry) else (admissionAnswerReject))))
 }
 
 definition{
-  name: encodeAnswer,
+  name: admissionEncodeAnswer,
   parameters: [code : Nat],
   result: Bytes,
-  body: (if (code =? (answerAccept)) then 0x616363657074 else (if (code =? (answerRekey)) then 0x72656b6579 else (if (code =? (answerRetry)) then 0x7265747279 else (if (code =? (answerReject)) then 0x72656a656374 else 0x696e76616c6964))))
+  body: (if (code =? (admissionAnswerAccept)) then 0x616363657074 else (if (code =? (admissionAnswerRekey)) then 0x72656b6579 else (if (code =? (admissionAnswerRetry)) then 0x7265747279 else (if (code =? (admissionAnswerReject)) then 0x72656a656374 else 0x696e76616c6964))))
 }
 
 definition{
-  name: dispatch,
+  name: admissionDispatch,
   parameters: [value : Bytes],
   result: Bytes,
-  body: (if (112 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (decodeField1 value 0)
+  body: (if (112 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (admissionDecodeField1 value 0)
     | Option.none => 0x696e76616c6964
-    | Option.some request => (encodeAnswer (judge request)))),
+    | Option.some request => (admissionEncodeAnswer (admissionJudge request)))),
   axioms: [Quot.sound, propext]
 }
 \end{semanticmodule}

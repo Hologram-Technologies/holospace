@@ -6,210 +6,210 @@
 \title{Text application model}
 \begin{semanticmodule}
 definition{
-  name: breaksInv001,
+  name: admissionBreaksInv001,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
-  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::labelDiffers))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerAccept)))
+  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::admissionLabelDiffers))) && ((HolospaceAdmission::admissionJudge request) =? (HolospaceAdmission::admissionAnswerAccept)))
 }
 
 theorem{
-  name: inv001Holds,
+  name: admissionInv001Holds,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
-  statement: ((breaksInv001 request) = false),
+  statement: ((admissionBreaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceAdmission::answerAccept,
-      HolospaceAdmission::answerReject,
-      HolospaceAdmission::answerRekey,
-      HolospaceAdmission::answerRetry,
-      HolospaceAdmission::axisBlake3,
-      HolospaceAdmission::axisSha256,
-      HolospaceAdmission::judge,
-      HolospaceAdmission::labelDiffers,
-      HolospaceAdmission::labelMatches,
-      HolospaceAdmission::rule1,
-      HolospaceAdmission::rule2,
-      HolospaceAdmission::rule3,
-      HolospaceAdmission::sourcesMore,
-      HolospaceAdmission::sourcesNone,
-      HolospaceAdmission::stageImport,
-      HolospaceAdmission::stageRuntime,
-      breaksInv001
+      HolospaceAdmission::admissionAnswerAccept,
+      HolospaceAdmission::admissionAnswerReject,
+      HolospaceAdmission::admissionAnswerRekey,
+      HolospaceAdmission::admissionAnswerRetry,
+      HolospaceAdmission::admissionAxisBlake3,
+      HolospaceAdmission::admissionAxisSha256,
+      HolospaceAdmission::admissionJudge,
+      HolospaceAdmission::admissionLabelDiffers,
+      HolospaceAdmission::admissionLabelMatches,
+      HolospaceAdmission::admissionRule1,
+      HolospaceAdmission::admissionRule2,
+      HolospaceAdmission::admissionRule3,
+      HolospaceAdmission::admissionSourcesMore,
+      HolospaceAdmission::admissionSourcesNone,
+      HolospaceAdmission::admissionStageImport,
+      HolospaceAdmission::admissionStageRuntime,
+      admissionBreaksInv001
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv002,
+  name: admissionBreaksInv002,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
-  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::labelDiffers))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerRekey)))
+  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::admissionLabelDiffers))) && ((HolospaceAdmission::admissionJudge request) =? (HolospaceAdmission::admissionAnswerRekey)))
 }
 
 theorem{
-  name: inv002Holds,
+  name: admissionInv002Holds,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
-  statement: ((breaksInv002 request) = false),
+  statement: ((admissionBreaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceAdmission::answerAccept,
-      HolospaceAdmission::answerReject,
-      HolospaceAdmission::answerRekey,
-      HolospaceAdmission::answerRetry,
-      HolospaceAdmission::axisBlake3,
-      HolospaceAdmission::axisSha256,
-      HolospaceAdmission::judge,
-      HolospaceAdmission::labelDiffers,
-      HolospaceAdmission::labelMatches,
-      HolospaceAdmission::rule1,
-      HolospaceAdmission::rule2,
-      HolospaceAdmission::rule3,
-      HolospaceAdmission::sourcesMore,
-      HolospaceAdmission::sourcesNone,
-      HolospaceAdmission::stageImport,
-      HolospaceAdmission::stageRuntime,
-      breaksInv002
+      HolospaceAdmission::admissionAnswerAccept,
+      HolospaceAdmission::admissionAnswerReject,
+      HolospaceAdmission::admissionAnswerRekey,
+      HolospaceAdmission::admissionAnswerRetry,
+      HolospaceAdmission::admissionAxisBlake3,
+      HolospaceAdmission::admissionAxisSha256,
+      HolospaceAdmission::admissionJudge,
+      HolospaceAdmission::admissionLabelDiffers,
+      HolospaceAdmission::admissionLabelMatches,
+      HolospaceAdmission::admissionRule1,
+      HolospaceAdmission::admissionRule2,
+      HolospaceAdmission::admissionRule3,
+      HolospaceAdmission::admissionSourcesMore,
+      HolospaceAdmission::admissionSourcesNone,
+      HolospaceAdmission::admissionStageImport,
+      HolospaceAdmission::admissionStageRuntime,
+      admissionBreaksInv002
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv003,
+  name: admissionBreaksInv003,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
-  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request axis) =? (HolospaceAdmission::axisSha256))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerAccept)))
+  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request axis) =? (HolospaceAdmission::admissionAxisSha256))) && ((HolospaceAdmission::admissionJudge request) =? (HolospaceAdmission::admissionAnswerAccept)))
 }
 
 theorem{
-  name: inv003Holds,
+  name: admissionInv003Holds,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
-  statement: ((breaksInv003 request) = false),
+  statement: ((admissionBreaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceAdmission::answerAccept,
-      HolospaceAdmission::answerReject,
-      HolospaceAdmission::answerRekey,
-      HolospaceAdmission::answerRetry,
-      HolospaceAdmission::axisBlake3,
-      HolospaceAdmission::axisSha256,
-      HolospaceAdmission::judge,
-      HolospaceAdmission::labelDiffers,
-      HolospaceAdmission::labelMatches,
-      HolospaceAdmission::rule1,
-      HolospaceAdmission::rule2,
-      HolospaceAdmission::rule3,
-      HolospaceAdmission::sourcesMore,
-      HolospaceAdmission::sourcesNone,
-      HolospaceAdmission::stageImport,
-      HolospaceAdmission::stageRuntime,
-      breaksInv003
+      HolospaceAdmission::admissionAnswerAccept,
+      HolospaceAdmission::admissionAnswerReject,
+      HolospaceAdmission::admissionAnswerRekey,
+      HolospaceAdmission::admissionAnswerRetry,
+      HolospaceAdmission::admissionAxisBlake3,
+      HolospaceAdmission::admissionAxisSha256,
+      HolospaceAdmission::admissionJudge,
+      HolospaceAdmission::admissionLabelDiffers,
+      HolospaceAdmission::admissionLabelMatches,
+      HolospaceAdmission::admissionRule1,
+      HolospaceAdmission::admissionRule2,
+      HolospaceAdmission::admissionRule3,
+      HolospaceAdmission::admissionSourcesMore,
+      HolospaceAdmission::admissionSourcesNone,
+      HolospaceAdmission::admissionStageImport,
+      HolospaceAdmission::admissionStageRuntime,
+      admissionBreaksInv003
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv004,
+  name: admissionBreaksInv004,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
-  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request stage) =? (HolospaceAdmission::stageRuntime))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerRekey)))
+  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request stage) =? (HolospaceAdmission::admissionStageRuntime))) && ((HolospaceAdmission::admissionJudge request) =? (HolospaceAdmission::admissionAnswerRekey)))
 }
 
 theorem{
-  name: inv004Holds,
+  name: admissionInv004Holds,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
-  statement: ((breaksInv004 request) = false),
+  statement: ((admissionBreaksInv004 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceAdmission::answerAccept,
-      HolospaceAdmission::answerReject,
-      HolospaceAdmission::answerRekey,
-      HolospaceAdmission::answerRetry,
-      HolospaceAdmission::axisBlake3,
-      HolospaceAdmission::axisSha256,
-      HolospaceAdmission::judge,
-      HolospaceAdmission::labelDiffers,
-      HolospaceAdmission::labelMatches,
-      HolospaceAdmission::rule1,
-      HolospaceAdmission::rule2,
-      HolospaceAdmission::rule3,
-      HolospaceAdmission::sourcesMore,
-      HolospaceAdmission::sourcesNone,
-      HolospaceAdmission::stageImport,
-      HolospaceAdmission::stageRuntime,
-      breaksInv004
+      HolospaceAdmission::admissionAnswerAccept,
+      HolospaceAdmission::admissionAnswerReject,
+      HolospaceAdmission::admissionAnswerRekey,
+      HolospaceAdmission::admissionAnswerRetry,
+      HolospaceAdmission::admissionAxisBlake3,
+      HolospaceAdmission::admissionAxisSha256,
+      HolospaceAdmission::admissionJudge,
+      HolospaceAdmission::admissionLabelDiffers,
+      HolospaceAdmission::admissionLabelMatches,
+      HolospaceAdmission::admissionRule1,
+      HolospaceAdmission::admissionRule2,
+      HolospaceAdmission::admissionRule3,
+      HolospaceAdmission::admissionSourcesMore,
+      HolospaceAdmission::admissionSourcesNone,
+      HolospaceAdmission::admissionStageImport,
+      HolospaceAdmission::admissionStageRuntime,
+      admissionBreaksInv004
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv005,
+  name: admissionBreaksInv005,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
-  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request sources) =? (HolospaceAdmission::sourcesNone))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerRetry)))
+  body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request sources) =? (HolospaceAdmission::admissionSourcesNone))) && ((HolospaceAdmission::admissionJudge request) =? (HolospaceAdmission::admissionAnswerRetry)))
 }
 
 theorem{
-  name: inv005Holds,
+  name: admissionInv005Holds,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
-  statement: ((breaksInv005 request) = false),
+  statement: ((admissionBreaksInv005 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceAdmission::answerAccept,
-      HolospaceAdmission::answerReject,
-      HolospaceAdmission::answerRekey,
-      HolospaceAdmission::answerRetry,
-      HolospaceAdmission::axisBlake3,
-      HolospaceAdmission::axisSha256,
-      HolospaceAdmission::judge,
-      HolospaceAdmission::labelDiffers,
-      HolospaceAdmission::labelMatches,
-      HolospaceAdmission::rule1,
-      HolospaceAdmission::rule2,
-      HolospaceAdmission::rule3,
-      HolospaceAdmission::sourcesMore,
-      HolospaceAdmission::sourcesNone,
-      HolospaceAdmission::stageImport,
-      HolospaceAdmission::stageRuntime,
-      breaksInv005
+      HolospaceAdmission::admissionAnswerAccept,
+      HolospaceAdmission::admissionAnswerReject,
+      HolospaceAdmission::admissionAnswerRekey,
+      HolospaceAdmission::admissionAnswerRetry,
+      HolospaceAdmission::admissionAxisBlake3,
+      HolospaceAdmission::admissionAxisSha256,
+      HolospaceAdmission::admissionJudge,
+      HolospaceAdmission::admissionLabelDiffers,
+      HolospaceAdmission::admissionLabelMatches,
+      HolospaceAdmission::admissionRule1,
+      HolospaceAdmission::admissionRule2,
+      HolospaceAdmission::admissionRule3,
+      HolospaceAdmission::admissionSourcesMore,
+      HolospaceAdmission::admissionSourcesNone,
+      HolospaceAdmission::admissionStageImport,
+      HolospaceAdmission::admissionStageRuntime,
+      admissionBreaksInv005
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv006,
+  name: admissionBreaksInv006,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
-  body: ((((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::labelDiffers))) && ((project request sources) =? (HolospaceAdmission::sourcesNone))) && (not ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerReject))))
+  body: ((((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::admissionLabelDiffers))) && ((project request sources) =? (HolospaceAdmission::admissionSourcesNone))) && (not ((HolospaceAdmission::admissionJudge request) =? (HolospaceAdmission::admissionAnswerReject))))
 }
 
 theorem{
-  name: inv006Holds,
+  name: admissionInv006Holds,
   parameters: [request : HolospaceAdmission::AdmissionRequest],
-  statement: ((breaksInv006 request) = false),
+  statement: ((admissionBreaksInv006 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceAdmission::answerAccept,
-      HolospaceAdmission::answerReject,
-      HolospaceAdmission::answerRekey,
-      HolospaceAdmission::answerRetry,
-      HolospaceAdmission::axisBlake3,
-      HolospaceAdmission::axisSha256,
-      HolospaceAdmission::judge,
-      HolospaceAdmission::labelDiffers,
-      HolospaceAdmission::labelMatches,
-      HolospaceAdmission::rule1,
-      HolospaceAdmission::rule2,
-      HolospaceAdmission::rule3,
-      HolospaceAdmission::sourcesMore,
-      HolospaceAdmission::sourcesNone,
-      HolospaceAdmission::stageImport,
-      HolospaceAdmission::stageRuntime,
-      breaksInv006
+      HolospaceAdmission::admissionAnswerAccept,
+      HolospaceAdmission::admissionAnswerReject,
+      HolospaceAdmission::admissionAnswerRekey,
+      HolospaceAdmission::admissionAnswerRetry,
+      HolospaceAdmission::admissionAxisBlake3,
+      HolospaceAdmission::admissionAxisSha256,
+      HolospaceAdmission::admissionJudge,
+      HolospaceAdmission::admissionLabelDiffers,
+      HolospaceAdmission::admissionLabelMatches,
+      HolospaceAdmission::admissionRule1,
+      HolospaceAdmission::admissionRule2,
+      HolospaceAdmission::admissionRule3,
+      HolospaceAdmission::admissionSourcesMore,
+      HolospaceAdmission::admissionSourcesNone,
+      HolospaceAdmission::admissionStageImport,
+      HolospaceAdmission::admissionStageRuntime,
+      admissionBreaksInv006
     ]
   },
   axioms: [Quot.sound, propext]

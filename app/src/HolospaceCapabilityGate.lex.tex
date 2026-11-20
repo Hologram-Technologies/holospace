@@ -6,51 +6,51 @@
 \importmodule{Foundation.View.Text.V1.Model}
 \title{Text application model}
 \begin{semanticmodule}
-definition{name: resourceShow, parameters: [], result: Nat, body: 0}
+definition{name: gateResourceShow, parameters: [], result: Nat, body: 0}
 
-definition{name: resourceRead, parameters: [], result: Nat, body: 1}
+definition{name: gateResourceRead, parameters: [], result: Nat, body: 1}
 
-definition{name: resourceWrite, parameters: [], result: Nat, body: 2}
+definition{name: gateResourceWrite, parameters: [], result: Nat, body: 2}
 
-definition{name: resourceNetwork, parameters: [], result: Nat, body: 3}
+definition{name: gateResourceNetwork, parameters: [], result: Nat, body: 3}
 
-definition{name: resourceSecrets, parameters: [], result: Nat, body: 4}
+definition{name: gateResourceSecrets, parameters: [], result: Nat, body: 4}
 
-definition{name: resourceExec, parameters: [], result: Nat, body: 5}
+definition{name: gateResourceExec, parameters: [], result: Nat, body: 5}
 
-definition{name: declaredNo, parameters: [], result: Nat, body: 0}
+definition{name: gateDeclaredNo, parameters: [], result: Nat, body: 0}
 
-definition{name: declaredYes, parameters: [], result: Nat, body: 1}
+definition{name: gateDeclaredYes, parameters: [], result: Nat, body: 1}
 
-definition{name: deniedNo, parameters: [], result: Nat, body: 0}
+definition{name: gateDeniedNo, parameters: [], result: Nat, body: 0}
 
-definition{name: deniedYes, parameters: [], result: Nat, body: 1}
+definition{name: gateDeniedYes, parameters: [], result: Nat, body: 1}
 
-definition{name: trustedNo, parameters: [], result: Nat, body: 0}
+definition{name: gateTrustedNo, parameters: [], result: Nat, body: 0}
 
-definition{name: trustedYes, parameters: [], result: Nat, body: 1}
+definition{name: gateTrustedYes, parameters: [], result: Nat, body: 1}
 
-definition{name: inscopeNo, parameters: [], result: Nat, body: 0}
+definition{name: gateInscopeNo, parameters: [], result: Nat, body: 0}
 
-definition{name: inscopeYes, parameters: [], result: Nat, body: 1}
+definition{name: gateInscopeYes, parameters: [], result: Nat, body: 1}
 
-definition{name: grantedNo, parameters: [], result: Nat, body: 0}
+definition{name: gateGrantedNo, parameters: [], result: Nat, body: 0}
 
-definition{name: grantedYes, parameters: [], result: Nat, body: 1}
+definition{name: gateGrantedYes, parameters: [], result: Nat, body: 1}
 
-definition{name: routeTab, parameters: [], result: Nat, body: 0}
+definition{name: gateRouteTab, parameters: [], result: Nat, body: 0}
 
-definition{name: routeExtension, parameters: [], result: Nat, body: 1}
+definition{name: gateRouteExtension, parameters: [], result: Nat, body: 1}
 
-definition{name: routeNode, parameters: [], result: Nat, body: 2}
+definition{name: gateRouteNode, parameters: [], result: Nat, body: 2}
 
-definition{name: answerDeny, parameters: [], result: Nat, body: 0}
+definition{name: gateAnswerDeny, parameters: [], result: Nat, body: 0}
 
-definition{name: answerAsk, parameters: [], result: Nat, body: 1}
+definition{name: gateAnswerAsk, parameters: [], result: Nat, body: 1}
 
-definition{name: answerAllow, parameters: [], result: Nat, body: 2}
+definition{name: gateAnswerAllow, parameters: [], result: Nat, body: 2}
 
-definition{name: answerRelayed, parameters: [], result: Nat, body: 3}
+definition{name: gateAnswerRelayed, parameters: [], result: Nat, body: 3}
 
 structure{
   name: GateRequest,
@@ -68,7 +68,7 @@ structure{
 }
 
 definition{
-  name: byteAt,
+  name: gateByteAt,
   parameters: [s : Bytes, i : Nat],
   result: (Option Nat),
   body: (match (prim index s i : (Option UInt8))
@@ -78,87 +78,87 @@ definition{
 }
 
 definition{
-  name: digitsValue,
+  name: gateDigitsValue,
   parameters: [s : Bytes, i : Nat, acc : Nat, fuel : Nat],
   result: (Option Nat),
   body: (match fuel
     | Nat.zero => (ctor Option.some [Nat] acc)
-    | Nat.succ rest => (match (byteAt s i)
+    | Nat.succ rest => (match (gateByteAt s i)
       | Option.none => (ctor Option.none [Nat])
-      | Option.some d => (if ((d <? 48) || (57 <? d)) then (ctor Option.none [Nat]) else (digitsValue s (i + 1) ((prim multiply acc 10 : Nat) + (prim subtract d 48 : Nat)) rest)))),
+      | Option.some d => (if ((d <? 48) || (57 <? d)) then (ctor Option.none [Nat]) else (gateDigitsValue s (i + 1) ((prim multiply acc 10 : Nat) + (prim subtract d 48 : Nat)) rest)))),
   axioms: [Quot.sound, propext],
   recursive_argument: fuel
 }
 
 definition{
-  name: parseDigits,
+  name: gateParseDigits,
   parameters: [s : Bytes],
   result: (Option Nat),
-  body: (if ((Foundation.Bytes::byteLength s) =? 0) then (ctor Option.none [Nat]) else (if (18 <? (Foundation.Bytes::byteLength s)) then (ctor Option.none [Nat]) else (match (byteAt s 0)
+  body: (if ((Foundation.Bytes::byteLength s) =? 0) then (ctor Option.none [Nat]) else (if (18 <? (Foundation.Bytes::byteLength s)) then (ctor Option.none [Nat]) else (match (gateByteAt s 0)
     | Option.none => (ctor Option.none [Nat])
-    | Option.some lead => (if ((lead =? 48) && (1 <? (Foundation.Bytes::byteLength s))) then (ctor Option.none [Nat]) else (digitsValue s 0 0 (Foundation.Bytes::byteLength s)))))),
+    | Option.some lead => (if ((lead =? 48) && (1 <? (Foundation.Bytes::byteLength s))) then (ctor Option.none [Nat]) else (gateDigitsValue s 0 0 (Foundation.Bytes::byteLength s)))))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: parseNumber,
+  name: gateParseNumber,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (parseDigits value),
+  body: (gateParseDigits value),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: parseResource,
+  name: gateParseResource,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x73686f77 : Bool) then (ctor Option.some [Nat] (resourceShow)) else (if (prim equal value 0x72656164 : Bool) then (ctor Option.some [Nat] (resourceRead)) else (if (prim equal value 0x7772697465 : Bool) then (ctor Option.some [Nat] (resourceWrite)) else (if (prim equal value 0x6e6574776f726b : Bool) then (ctor Option.some [Nat] (resourceNetwork)) else (if (prim equal value 0x73656372657473 : Bool) then (ctor Option.some [Nat] (resourceSecrets)) else (if (prim equal value 0x65786563 : Bool) then (ctor Option.some [Nat] (resourceExec)) else (ctor Option.none [Nat])))))))
+  body: (if (prim equal value 0x73686f77 : Bool) then (ctor Option.some [Nat] (gateResourceShow)) else (if (prim equal value 0x72656164 : Bool) then (ctor Option.some [Nat] (gateResourceRead)) else (if (prim equal value 0x7772697465 : Bool) then (ctor Option.some [Nat] (gateResourceWrite)) else (if (prim equal value 0x6e6574776f726b : Bool) then (ctor Option.some [Nat] (gateResourceNetwork)) else (if (prim equal value 0x73656372657473 : Bool) then (ctor Option.some [Nat] (gateResourceSecrets)) else (if (prim equal value 0x65786563 : Bool) then (ctor Option.some [Nat] (gateResourceExec)) else (ctor Option.none [Nat])))))))
 }
 
 definition{
-  name: parseDeclared,
+  name: gateParseDeclared,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (declaredNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (declaredYes)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (gateDeclaredNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (gateDeclaredYes)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseDenied,
+  name: gateParseDenied,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (deniedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (deniedYes)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (gateDeniedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (gateDeniedYes)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseTrusted,
+  name: gateParseTrusted,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (trustedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (trustedYes)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (gateTrustedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (gateTrustedYes)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseInscope,
+  name: gateParseInscope,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (inscopeNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (inscopeYes)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (gateInscopeNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (gateInscopeYes)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseGranted,
+  name: gateParseGranted,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (grantedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (grantedYes)) else (ctor Option.none [Nat])))
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (gateGrantedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (gateGrantedYes)) else (ctor Option.none [Nat])))
 }
 
 definition{
-  name: parseRoute,
+  name: gateParseRoute,
   parameters: [value : Bytes],
   result: (Option Nat),
-  body: (if (prim equal value 0x746162 : Bool) then (ctor Option.some [Nat] (routeTab)) else (if (prim equal value 0x657874656e73696f6e : Bool) then (ctor Option.some [Nat] (routeExtension)) else (if (prim equal value 0x6e6f6465 : Bool) then (ctor Option.some [Nat] (routeNode)) else (ctor Option.none [Nat]))))
+  body: (if (prim equal value 0x746162 : Bool) then (ctor Option.some [Nat] (gateRouteTab)) else (if (prim equal value 0x657874656e73696f6e : Bool) then (ctor Option.some [Nat] (gateRouteExtension)) else (if (prim equal value 0x6e6f6465 : Bool) then (ctor Option.some [Nat] (gateRouteNode)) else (ctor Option.none [Nat]))))
 }
 
 definition{
-  name: sliceOf,
+  name: gateSliceOf,
   parameters: [s : Bytes, start : Nat, count : Nat],
   result: Bytes,
   body: (match (prim slice s start count : (Option Bytes))
@@ -167,172 +167,172 @@ definition{
 }
 
 definition{
-  name: fieldEnd,
+  name: gateFieldEnd,
   parameters: [s : Bytes, i : Nat, fuel : Nat],
   result: Nat,
   body: (match fuel
     | Nat.zero => i
-    | Nat.succ rest => (match (byteAt s i)
+    | Nat.succ rest => (match (gateByteAt s i)
       | Option.none => i
-      | Option.some d => (if (d =? 32) then i else (fieldEnd s (i + 1) rest)))),
+      | Option.some d => (if (d =? 32) then i else (gateFieldEnd s (i + 1) rest)))),
   axioms: [Quot.sound, propext],
   recursive_argument: fuel
 }
 
 definition{
-  name: decodeField7,
+  name: gateDecodeField7,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat, v5 : Nat, v6 : Nat],
   result: (Option GateRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseRoute (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (gateFieldEnd s start (Foundation.Bytes::byteLength s)); (match (gateParseRoute (gateSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [GateRequest])
     | Option.some v7 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [GateRequest] (record GateRequest {resource := v1, declared := v2, denied := v3, trusted := v4, inscope := v5, granted := v6, route := v7})) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField6,
+  name: gateDecodeField6,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat, v5 : Nat],
   result: (Option GateRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseGranted (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (gateFieldEnd s start (Foundation.Bytes::byteLength s)); (match (gateParseGranted (gateSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [GateRequest])
-    | Option.some v6 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField7 s (e + 1) v1 v2 v3 v4 v5 v6) else (ctor Option.none [GateRequest])))),
+    | Option.some v6 => (if (e <? (Foundation.Bytes::byteLength s)) then (gateDecodeField7 s (e + 1) v1 v2 v3 v4 v5 v6) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField5,
+  name: gateDecodeField5,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat],
   result: (Option GateRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseInscope (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (gateFieldEnd s start (Foundation.Bytes::byteLength s)); (match (gateParseInscope (gateSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [GateRequest])
-    | Option.some v5 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField6 s (e + 1) v1 v2 v3 v4 v5) else (ctor Option.none [GateRequest])))),
+    | Option.some v5 => (if (e <? (Foundation.Bytes::byteLength s)) then (gateDecodeField6 s (e + 1) v1 v2 v3 v4 v5) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField4,
+  name: gateDecodeField4,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
   result: (Option GateRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseTrusted (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (gateFieldEnd s start (Foundation.Bytes::byteLength s)); (match (gateParseTrusted (gateSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [GateRequest])
-    | Option.some v4 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField5 s (e + 1) v1 v2 v3 v4) else (ctor Option.none [GateRequest])))),
+    | Option.some v4 => (if (e <? (Foundation.Bytes::byteLength s)) then (gateDecodeField5 s (e + 1) v1 v2 v3 v4) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField3,
+  name: gateDecodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
   result: (Option GateRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseDenied (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (gateFieldEnd s start (Foundation.Bytes::byteLength s)); (match (gateParseDenied (gateSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [GateRequest])
-    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [GateRequest])))),
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (gateDecodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField2,
+  name: gateDecodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
   result: (Option GateRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseDeclared (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (gateFieldEnd s start (Foundation.Bytes::byteLength s)); (match (gateParseDeclared (gateSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [GateRequest])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [GateRequest])))),
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (gateDecodeField3 s (e + 1) v1 v2) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: decodeField1,
+  name: gateDecodeField1,
   parameters: [s : Bytes, start : Nat],
   result: (Option GateRequest),
-  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseResource (sliceOf s start (prim subtract e start : Nat)))
+  body: (let e : Nat := (gateFieldEnd s start (Foundation.Bytes::byteLength s)); (match (gateParseResource (gateSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [GateRequest])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [GateRequest])))),
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (gateDecodeField2 s (e + 1) v1) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: rule1,
+  name: gateRule1,
   parameters: [request : GateRequest],
   result: Bool,
-  body: ((project request denied) =? (deniedYes))
+  body: ((project request denied) =? (gateDeniedYes))
 }
 
 definition{
-  name: rule2,
+  name: gateRule2,
   parameters: [request : GateRequest],
   result: Bool,
-  body: ((project request declared) =? (declaredNo))
+  body: ((project request declared) =? (gateDeclaredNo))
 }
 
 definition{
-  name: rule3,
+  name: gateRule3,
   parameters: [request : GateRequest],
   result: Bool,
-  body: ((project request inscope) =? (inscopeNo))
+  body: ((project request inscope) =? (gateInscopeNo))
 }
 
 definition{
-  name: rule4,
+  name: gateRule4,
   parameters: [request : GateRequest],
   result: Bool,
-  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceWrite)))
+  body: (((project request trusted) =? (gateTrustedNo)) && ((project request resource) =? (gateResourceWrite)))
 }
 
 definition{
-  name: rule5,
+  name: gateRule5,
   parameters: [request : GateRequest],
   result: Bool,
-  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceNetwork)))
+  body: (((project request trusted) =? (gateTrustedNo)) && ((project request resource) =? (gateResourceNetwork)))
 }
 
 definition{
-  name: rule6,
+  name: gateRule6,
   parameters: [request : GateRequest],
   result: Bool,
-  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceSecrets)))
+  body: (((project request trusted) =? (gateTrustedNo)) && ((project request resource) =? (gateResourceSecrets)))
 }
 
 definition{
-  name: rule7,
+  name: gateRule7,
   parameters: [request : GateRequest],
   result: Bool,
-  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceExec)))
+  body: (((project request trusted) =? (gateTrustedNo)) && ((project request resource) =? (gateResourceExec)))
 }
 
 definition{
-  name: rule8,
+  name: gateRule8,
   parameters: [request : GateRequest],
   result: Bool,
-  body: ((((project request granted) =? (grantedYes)) && ((project request resource) =? (resourceNetwork))) && (not ((project request route) =? (routeTab))))
+  body: ((((project request granted) =? (gateGrantedYes)) && ((project request resource) =? (gateResourceNetwork))) && (not ((project request route) =? (gateRouteTab))))
 }
 
 definition{
-  name: rule9,
+  name: gateRule9,
   parameters: [request : GateRequest],
   result: Bool,
-  body: ((project request granted) =? (grantedYes))
+  body: ((project request granted) =? (gateGrantedYes))
 }
 
 definition{
-  name: judge,
+  name: gateJudge,
   parameters: [request : GateRequest],
   result: Nat,
-  body: (if (rule1 request) then (answerDeny) else (if (rule2 request) then (answerDeny) else (if (rule3 request) then (answerDeny) else (if (rule4 request) then (answerDeny) else (if (rule5 request) then (answerDeny) else (if (rule6 request) then (answerDeny) else (if (rule7 request) then (answerDeny) else (if (rule8 request) then (answerRelayed) else (if (rule9 request) then (answerAllow) else (answerAsk))))))))))
+  body: (if (gateRule1 request) then (gateAnswerDeny) else (if (gateRule2 request) then (gateAnswerDeny) else (if (gateRule3 request) then (gateAnswerDeny) else (if (gateRule4 request) then (gateAnswerDeny) else (if (gateRule5 request) then (gateAnswerDeny) else (if (gateRule6 request) then (gateAnswerDeny) else (if (gateRule7 request) then (gateAnswerDeny) else (if (gateRule8 request) then (gateAnswerRelayed) else (if (gateRule9 request) then (gateAnswerAllow) else (gateAnswerAsk))))))))))
 }
 
 definition{
-  name: encodeAnswer,
+  name: gateEncodeAnswer,
   parameters: [code : Nat],
   result: Bytes,
-  body: (if (code =? (answerDeny)) then 0x64656e79 else (if (code =? (answerAsk)) then 0x61736b else (if (code =? (answerAllow)) then 0x616c6c6f77 else (if (code =? (answerRelayed)) then 0x72656c61796564 else 0x696e76616c6964))))
+  body: (if (code =? (gateAnswerDeny)) then 0x64656e79 else (if (code =? (gateAnswerAsk)) then 0x61736b else (if (code =? (gateAnswerAllow)) then 0x616c6c6f77 else (if (code =? (gateAnswerRelayed)) then 0x72656c61796564 else 0x696e76616c6964))))
 }
 
 definition{
-  name: dispatch,
+  name: gateDispatch,
   parameters: [value : Bytes],
   result: Bytes,
-  body: (if (184 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (decodeField1 value 0)
+  body: (if (184 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (gateDecodeField1 value 0)
     | Option.none => 0x696e76616c6964
-    | Option.some request => (encodeAnswer (judge request)))),
+    | Option.some request => (gateEncodeAnswer (gateJudge request)))),
   axioms: [Quot.sound, propext]
 }
 \end{semanticmodule}

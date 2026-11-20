@@ -6,84 +6,84 @@
 \title{Text application model}
 \begin{semanticmodule}
 definition{
-  name: breaksInv001,
+  name: isolationBreaksInv001,
   parameters: [request : HolospaceIsolation::IsolationRequest],
   result: Bool,
-  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindPrivate))) && (not ((project request owner) =? (project request requester)))) && ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow)))
+  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::isolationKindPrivate))) && (not ((project request owner) =? (project request requester)))) && ((HolospaceIsolation::isolationJudge request) =? (HolospaceIsolation::isolationAnswerAllow)))
 }
 
 theorem{
-  name: inv001Holds,
+  name: isolationInv001Holds,
   parameters: [request : HolospaceIsolation::IsolationRequest],
-  statement: ((breaksInv001 request) = false),
+  statement: ((isolationBreaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceIsolation::answerAllow,
-      HolospaceIsolation::answerDeny,
-      HolospaceIsolation::judge,
-      HolospaceIsolation::kindContent,
-      HolospaceIsolation::kindPrivate,
-      HolospaceIsolation::opRead,
-      HolospaceIsolation::opWrite,
-      HolospaceIsolation::rule1,
-      HolospaceIsolation::rule2,
-      breaksInv001
+      HolospaceIsolation::isolationAnswerAllow,
+      HolospaceIsolation::isolationAnswerDeny,
+      HolospaceIsolation::isolationJudge,
+      HolospaceIsolation::isolationKindContent,
+      HolospaceIsolation::isolationKindPrivate,
+      HolospaceIsolation::isolationOpRead,
+      HolospaceIsolation::isolationOpWrite,
+      HolospaceIsolation::isolationRule1,
+      HolospaceIsolation::isolationRule2,
+      isolationBreaksInv001
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv002,
+  name: isolationBreaksInv002,
   parameters: [request : HolospaceIsolation::IsolationRequest],
   result: Bool,
-  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindContent))) && ((project request op) =? (HolospaceIsolation::opWrite))) && ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow)))
+  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::isolationKindContent))) && ((project request op) =? (HolospaceIsolation::isolationOpWrite))) && ((HolospaceIsolation::isolationJudge request) =? (HolospaceIsolation::isolationAnswerAllow)))
 }
 
 theorem{
-  name: inv002Holds,
+  name: isolationInv002Holds,
   parameters: [request : HolospaceIsolation::IsolationRequest],
-  statement: ((breaksInv002 request) = false),
+  statement: ((isolationBreaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceIsolation::answerAllow,
-      HolospaceIsolation::answerDeny,
-      HolospaceIsolation::judge,
-      HolospaceIsolation::kindContent,
-      HolospaceIsolation::kindPrivate,
-      HolospaceIsolation::opRead,
-      HolospaceIsolation::opWrite,
-      HolospaceIsolation::rule1,
-      HolospaceIsolation::rule2,
-      breaksInv002
+      HolospaceIsolation::isolationAnswerAllow,
+      HolospaceIsolation::isolationAnswerDeny,
+      HolospaceIsolation::isolationJudge,
+      HolospaceIsolation::isolationKindContent,
+      HolospaceIsolation::isolationKindPrivate,
+      HolospaceIsolation::isolationOpRead,
+      HolospaceIsolation::isolationOpWrite,
+      HolospaceIsolation::isolationRule1,
+      HolospaceIsolation::isolationRule2,
+      isolationBreaksInv002
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv003,
+  name: isolationBreaksInv003,
   parameters: [request : HolospaceIsolation::IsolationRequest],
   result: Bool,
-  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindPrivate))) && ((project request owner) =? (project request requester))) && (not ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow))))
+  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::isolationKindPrivate))) && ((project request owner) =? (project request requester))) && (not ((HolospaceIsolation::isolationJudge request) =? (HolospaceIsolation::isolationAnswerAllow))))
 }
 
 theorem{
-  name: inv003Holds,
+  name: isolationInv003Holds,
   parameters: [request : HolospaceIsolation::IsolationRequest],
-  statement: ((breaksInv003 request) = false),
+  statement: ((isolationBreaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceIsolation::answerAllow,
-      HolospaceIsolation::answerDeny,
-      HolospaceIsolation::judge,
-      HolospaceIsolation::kindContent,
-      HolospaceIsolation::kindPrivate,
-      HolospaceIsolation::opRead,
-      HolospaceIsolation::opWrite,
-      HolospaceIsolation::rule1,
-      HolospaceIsolation::rule2,
-      breaksInv003
+      HolospaceIsolation::isolationAnswerAllow,
+      HolospaceIsolation::isolationAnswerDeny,
+      HolospaceIsolation::isolationJudge,
+      HolospaceIsolation::isolationKindContent,
+      HolospaceIsolation::isolationKindPrivate,
+      HolospaceIsolation::isolationOpRead,
+      HolospaceIsolation::isolationOpWrite,
+      HolospaceIsolation::isolationRule1,
+      HolospaceIsolation::isolationRule2,
+      isolationBreaksInv003
     ]
   },
   axioms: [Classical.choice, Quot.sound, propext]

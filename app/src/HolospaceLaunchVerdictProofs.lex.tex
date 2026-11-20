@@ -6,160 +6,160 @@
 \title{Text application model}
 \begin{semanticmodule}
 definition{
-  name: breaksInv001,
+  name: verdictBreaksInv001,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
-  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request seal) =? (HolospaceLaunchVerdict::sealBroken))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
+  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request seal) =? (HolospaceLaunchVerdict::verdictSealBroken))) && ((HolospaceLaunchVerdict::verdictJudge request) =? (HolospaceLaunchVerdict::verdictAnswerVerified)))
 }
 
 theorem{
-  name: inv001Holds,
+  name: verdictInv001Holds,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
-  statement: ((breaksInv001 request) = false),
+  statement: ((verdictBreaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceLaunchVerdict::answerBlocked,
-      HolospaceLaunchVerdict::answerVerified,
-      HolospaceLaunchVerdict::judge,
-      HolospaceLaunchVerdict::membersDiffer,
-      HolospaceLaunchVerdict::membersMatch,
-      HolospaceLaunchVerdict::provenanceConsistent,
-      HolospaceLaunchVerdict::provenanceInconsistent,
-      HolospaceLaunchVerdict::rule1,
-      HolospaceLaunchVerdict::sealBroken,
-      HolospaceLaunchVerdict::sealIntact,
-      HolospaceLaunchVerdict::vectorsFailed,
-      HolospaceLaunchVerdict::vectorsPassed,
-      HolospaceLaunchVerdict::vectorsSkipped,
-      breaksInv001
+      HolospaceLaunchVerdict::verdictAnswerBlocked,
+      HolospaceLaunchVerdict::verdictAnswerVerified,
+      HolospaceLaunchVerdict::verdictJudge,
+      HolospaceLaunchVerdict::verdictMembersDiffer,
+      HolospaceLaunchVerdict::verdictMembersMatch,
+      HolospaceLaunchVerdict::verdictProvenanceConsistent,
+      HolospaceLaunchVerdict::verdictProvenanceInconsistent,
+      HolospaceLaunchVerdict::verdictRule1,
+      HolospaceLaunchVerdict::verdictSealBroken,
+      HolospaceLaunchVerdict::verdictSealIntact,
+      HolospaceLaunchVerdict::verdictVectorsFailed,
+      HolospaceLaunchVerdict::verdictVectorsPassed,
+      HolospaceLaunchVerdict::verdictVectorsSkipped,
+      verdictBreaksInv001
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv002,
+  name: verdictBreaksInv002,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
-  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request members) =? (HolospaceLaunchVerdict::membersDiffer))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
+  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request members) =? (HolospaceLaunchVerdict::verdictMembersDiffer))) && ((HolospaceLaunchVerdict::verdictJudge request) =? (HolospaceLaunchVerdict::verdictAnswerVerified)))
 }
 
 theorem{
-  name: inv002Holds,
+  name: verdictInv002Holds,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
-  statement: ((breaksInv002 request) = false),
+  statement: ((verdictBreaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceLaunchVerdict::answerBlocked,
-      HolospaceLaunchVerdict::answerVerified,
-      HolospaceLaunchVerdict::judge,
-      HolospaceLaunchVerdict::membersDiffer,
-      HolospaceLaunchVerdict::membersMatch,
-      HolospaceLaunchVerdict::provenanceConsistent,
-      HolospaceLaunchVerdict::provenanceInconsistent,
-      HolospaceLaunchVerdict::rule1,
-      HolospaceLaunchVerdict::sealBroken,
-      HolospaceLaunchVerdict::sealIntact,
-      HolospaceLaunchVerdict::vectorsFailed,
-      HolospaceLaunchVerdict::vectorsPassed,
-      HolospaceLaunchVerdict::vectorsSkipped,
-      breaksInv002
+      HolospaceLaunchVerdict::verdictAnswerBlocked,
+      HolospaceLaunchVerdict::verdictAnswerVerified,
+      HolospaceLaunchVerdict::verdictJudge,
+      HolospaceLaunchVerdict::verdictMembersDiffer,
+      HolospaceLaunchVerdict::verdictMembersMatch,
+      HolospaceLaunchVerdict::verdictProvenanceConsistent,
+      HolospaceLaunchVerdict::verdictProvenanceInconsistent,
+      HolospaceLaunchVerdict::verdictRule1,
+      HolospaceLaunchVerdict::verdictSealBroken,
+      HolospaceLaunchVerdict::verdictSealIntact,
+      HolospaceLaunchVerdict::verdictVectorsFailed,
+      HolospaceLaunchVerdict::verdictVectorsPassed,
+      HolospaceLaunchVerdict::verdictVectorsSkipped,
+      verdictBreaksInv002
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv003,
+  name: verdictBreaksInv003,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
-  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request provenance) =? (HolospaceLaunchVerdict::provenanceInconsistent))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
+  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request provenance) =? (HolospaceLaunchVerdict::verdictProvenanceInconsistent))) && ((HolospaceLaunchVerdict::verdictJudge request) =? (HolospaceLaunchVerdict::verdictAnswerVerified)))
 }
 
 theorem{
-  name: inv003Holds,
+  name: verdictInv003Holds,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
-  statement: ((breaksInv003 request) = false),
+  statement: ((verdictBreaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceLaunchVerdict::answerBlocked,
-      HolospaceLaunchVerdict::answerVerified,
-      HolospaceLaunchVerdict::judge,
-      HolospaceLaunchVerdict::membersDiffer,
-      HolospaceLaunchVerdict::membersMatch,
-      HolospaceLaunchVerdict::provenanceConsistent,
-      HolospaceLaunchVerdict::provenanceInconsistent,
-      HolospaceLaunchVerdict::rule1,
-      HolospaceLaunchVerdict::sealBroken,
-      HolospaceLaunchVerdict::sealIntact,
-      HolospaceLaunchVerdict::vectorsFailed,
-      HolospaceLaunchVerdict::vectorsPassed,
-      HolospaceLaunchVerdict::vectorsSkipped,
-      breaksInv003
+      HolospaceLaunchVerdict::verdictAnswerBlocked,
+      HolospaceLaunchVerdict::verdictAnswerVerified,
+      HolospaceLaunchVerdict::verdictJudge,
+      HolospaceLaunchVerdict::verdictMembersDiffer,
+      HolospaceLaunchVerdict::verdictMembersMatch,
+      HolospaceLaunchVerdict::verdictProvenanceConsistent,
+      HolospaceLaunchVerdict::verdictProvenanceInconsistent,
+      HolospaceLaunchVerdict::verdictRule1,
+      HolospaceLaunchVerdict::verdictSealBroken,
+      HolospaceLaunchVerdict::verdictSealIntact,
+      HolospaceLaunchVerdict::verdictVectorsFailed,
+      HolospaceLaunchVerdict::verdictVectorsPassed,
+      HolospaceLaunchVerdict::verdictVectorsSkipped,
+      verdictBreaksInv003
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv004,
+  name: verdictBreaksInv004,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
-  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && (not ((project request vectors) =? (HolospaceLaunchVerdict::vectorsPassed)))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
+  body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && (not ((project request vectors) =? (HolospaceLaunchVerdict::verdictVectorsPassed)))) && ((HolospaceLaunchVerdict::verdictJudge request) =? (HolospaceLaunchVerdict::verdictAnswerVerified)))
 }
 
 theorem{
-  name: inv004Holds,
+  name: verdictInv004Holds,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
-  statement: ((breaksInv004 request) = false),
+  statement: ((verdictBreaksInv004 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceLaunchVerdict::answerBlocked,
-      HolospaceLaunchVerdict::answerVerified,
-      HolospaceLaunchVerdict::judge,
-      HolospaceLaunchVerdict::membersDiffer,
-      HolospaceLaunchVerdict::membersMatch,
-      HolospaceLaunchVerdict::provenanceConsistent,
-      HolospaceLaunchVerdict::provenanceInconsistent,
-      HolospaceLaunchVerdict::rule1,
-      HolospaceLaunchVerdict::sealBroken,
-      HolospaceLaunchVerdict::sealIntact,
-      HolospaceLaunchVerdict::vectorsFailed,
-      HolospaceLaunchVerdict::vectorsPassed,
-      HolospaceLaunchVerdict::vectorsSkipped,
-      breaksInv004
+      HolospaceLaunchVerdict::verdictAnswerBlocked,
+      HolospaceLaunchVerdict::verdictAnswerVerified,
+      HolospaceLaunchVerdict::verdictJudge,
+      HolospaceLaunchVerdict::verdictMembersDiffer,
+      HolospaceLaunchVerdict::verdictMembersMatch,
+      HolospaceLaunchVerdict::verdictProvenanceConsistent,
+      HolospaceLaunchVerdict::verdictProvenanceInconsistent,
+      HolospaceLaunchVerdict::verdictRule1,
+      HolospaceLaunchVerdict::verdictSealBroken,
+      HolospaceLaunchVerdict::verdictSealIntact,
+      HolospaceLaunchVerdict::verdictVectorsFailed,
+      HolospaceLaunchVerdict::verdictVectorsPassed,
+      HolospaceLaunchVerdict::verdictVectorsSkipped,
+      verdictBreaksInv004
     ]
   },
   axioms: [Quot.sound, propext]
 }
 
 definition{
-  name: breaksInv005,
+  name: verdictBreaksInv005,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
-  body: ((((((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request seal) =? (HolospaceLaunchVerdict::sealIntact))) && ((project request members) =? (HolospaceLaunchVerdict::membersMatch))) && ((project request provenance) =? (HolospaceLaunchVerdict::provenanceConsistent))) && ((project request vectors) =? (HolospaceLaunchVerdict::vectorsPassed))) && (not ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified))))
+  body: ((((((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request seal) =? (HolospaceLaunchVerdict::verdictSealIntact))) && ((project request members) =? (HolospaceLaunchVerdict::verdictMembersMatch))) && ((project request provenance) =? (HolospaceLaunchVerdict::verdictProvenanceConsistent))) && ((project request vectors) =? (HolospaceLaunchVerdict::verdictVectorsPassed))) && (not ((HolospaceLaunchVerdict::verdictJudge request) =? (HolospaceLaunchVerdict::verdictAnswerVerified))))
 }
 
 theorem{
-  name: inv005Holds,
+  name: verdictInv005Holds,
   parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
-  statement: ((breaksInv005 request) = false),
+  statement: ((verdictBreaksInv005 request) = false),
   proof: linear_arithmetic{
     definitions: [
-      HolospaceLaunchVerdict::answerBlocked,
-      HolospaceLaunchVerdict::answerVerified,
-      HolospaceLaunchVerdict::judge,
-      HolospaceLaunchVerdict::membersDiffer,
-      HolospaceLaunchVerdict::membersMatch,
-      HolospaceLaunchVerdict::provenanceConsistent,
-      HolospaceLaunchVerdict::provenanceInconsistent,
-      HolospaceLaunchVerdict::rule1,
-      HolospaceLaunchVerdict::sealBroken,
-      HolospaceLaunchVerdict::sealIntact,
-      HolospaceLaunchVerdict::vectorsFailed,
-      HolospaceLaunchVerdict::vectorsPassed,
-      HolospaceLaunchVerdict::vectorsSkipped,
-      breaksInv005
+      HolospaceLaunchVerdict::verdictAnswerBlocked,
+      HolospaceLaunchVerdict::verdictAnswerVerified,
+      HolospaceLaunchVerdict::verdictJudge,
+      HolospaceLaunchVerdict::verdictMembersDiffer,
+      HolospaceLaunchVerdict::verdictMembersMatch,
+      HolospaceLaunchVerdict::verdictProvenanceConsistent,
+      HolospaceLaunchVerdict::verdictProvenanceInconsistent,
+      HolospaceLaunchVerdict::verdictRule1,
+      HolospaceLaunchVerdict::verdictSealBroken,
+      HolospaceLaunchVerdict::verdictSealIntact,
+      HolospaceLaunchVerdict::verdictVectorsFailed,
+      HolospaceLaunchVerdict::verdictVectorsPassed,
+      HolospaceLaunchVerdict::verdictVectorsSkipped,
+      verdictBreaksInv005
     ]
   },
   axioms: [Classical.choice, Quot.sound, propext]

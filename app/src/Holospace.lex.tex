@@ -15,7 +15,7 @@ definition{
   name: route,
   parameters: [word : Bytes, rest : Bytes],
   result: Bytes,
-  body: (if (prim equal word 0x76657264696374 : Bool) then (HolospaceLaunchVerdict::dispatch rest) else (if (prim equal word 0x61646d697373696f6e : Bool) then (HolospaceAdmission::dispatch rest) else (if (prim equal word 0x69736f6c6174696f6e : Bool) then (HolospaceIsolation::dispatch rest) else (if (prim equal word 0x67617465 : Bool) then (HolospaceCapabilityGate::dispatch rest) else (if (prim equal word 0x6c6966656379636c65 : Bool) then (HolospaceLifecycle::dispatch rest) else 0x696e76616c6964))))),
+  body: (if (prim equal word 0x76657264696374 : Bool) then (HolospaceLaunchVerdict::verdictDispatch rest) else (if (prim equal word 0x61646d697373696f6e : Bool) then (HolospaceAdmission::admissionDispatch rest) else (if (prim equal word 0x69736f6c6174696f6e : Bool) then (HolospaceIsolation::isolationDispatch rest) else (if (prim equal word 0x67617465 : Bool) then (HolospaceCapabilityGate::gateDispatch rest) else (if (prim equal word 0x6c6966656379636c65 : Bool) then (HolospaceLifecycle::lifecycleDispatch rest) else 0x696e76616c6964))))),
   axioms: [Quot.sound, propext]
 }
 
@@ -23,7 +23,7 @@ definition{
   name: dispatch,
   parameters: [value : Bytes],
   result: Bytes,
-  body: (if (200 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (let e : Nat := (HolospaceAdmission::fieldEnd value 0 (Foundation.Bytes::byteLength value)); (if (e <? (Foundation.Bytes::byteLength value)) then (route (HolospaceAdmission::sliceOf value 0 e) (HolospaceAdmission::sliceOf value (e + 1) (prim subtract (prim subtract (Foundation.Bytes::byteLength value) e : Nat) 1 : Nat))) else 0x696e76616c6964))),
+  body: (if (200 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (let e : Nat := (HolospaceAdmission::admissionFieldEnd value 0 (Foundation.Bytes::byteLength value)); (if (e <? (Foundation.Bytes::byteLength value)) then (route (HolospaceAdmission::admissionSliceOf value 0 e) (HolospaceAdmission::admissionSliceOf value (e + 1) (prim subtract (prim subtract (Foundation.Bytes::byteLength value) e : Nat) 1 : Nat))) else 0x696e76616c6964))),
   axioms: [Quot.sound, propext]
 }
 
