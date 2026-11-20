@@ -19,7 +19,7 @@ The new repository holds the kernel, the shell and the providers. Emulator and s
 2. Serverless. With static hosting alone: the shell, every Prism app, a pre-built Linux image fetched by hash, files, editor, search, git against hosts that allow cross-origin requests. Not serverless: pulling an OCI image from a registry, and any guest TCP (`apt`, `npm`, `git clone` in the guest). Those need a Chrome extension with a browser flag, or a native node. WebRTC needs a second peer and manual signalling.
 3. Verification boundary. Confirmed. `PP2011` holds: a verified holo is an import-free guest with an empty capability set and a generated View. Holospace cannot itself be one verified holo. Kernels are verified holos; the body is audited and tested.
 4. Proof scope. Confirmed. Decisions are proved; the emulator is tested against the RISC-V suite and QEMU.
-5. Two `.holo` formats. They are different. Prism writes holo v5: a UORC archive sealed by a SHA-256 chain. Hologram writes HOLO v4: sections with a BLAKE3 footer, able to carry Wasm, View and root file system layers. Prism's legacy v4 shares Hologram's frame. Decision: two existing loaders behind one "open by hash" call, `prism-code/browser` for Prism holos and `hologram-archive` for Hologram ones. No third loader.
+5. Two `.holo` formats. They are different (corrected below). Prism writes holo v5: a UORC archive sealed by a SHA-256 chain. Hologram writes HOLO v4: sections with a BLAKE3 footer, able to carry Wasm, View and root file system layers. Prism's legacy v4 shares Hologram's frame. Decision: two existing loaders behind one "open by hash" call, `prism-code/browser` for Prism holos and `hologram-archive` for Hologram ones. No third loader.
 6. Two hashes. Prism holo v5 identity is SHA-256 only. Hologram's store accepts `sha256:` as a second key axis. Decision: content is keyed by BLAKE3; a Prism holo's SHA-256 name is checked at import and kept as a field.
 7. Any browser. Read: the existing peer uses no threads, no shared memory and no service worker, and is tested on headless Chromium only. Decision: stay single-threaded per worker so cross-origin isolation is never required, which keeps GitHub Pages and Safari possible. Support matrix below.
 8. Authoring. `prism/spec.json` is removed at PrismPM head; the path is hand-written `.lex.tex`. The `prism` tools attached to this session still describe spec.json and are stale. Only rule apps build without Docker; the kernels here are stateful, so they build through `prism-code build --remote github`.
@@ -45,6 +45,9 @@ The guarantees are listed in `GUARANTEES.md` for approval before any proving.
 Limit: Lean proves the model. It does not prove the Rust and JavaScript body obeys it. Each kernel gets a differential test against the body.
 
 ## Shell and Prism app runtime
+
+Corrections after building it (2026-11-20). A Prism View mounts with no intent service worker: it runs in a sandboxed frame and its one request is answered over postMessage. Prism holo v4 and v5 both open through one loader. The Hologram archives actually published are `holo-game` records carrying a ROM, not Prism apps, so the shell names and refuses them; "two loaders behind one open" is not built and may not be needed.
+
 
 One service worker serves hash-named assets, cached forever. A release is one root hash.
 It also answers `/_hologram/intent`, which is what mounts a Prism View in a tab.
@@ -79,16 +82,30 @@ Dependency: Prism IDE is a spike and one kernel today. Gate 4 waits on it.
 | Android Chromium | yes | small images only (unverified) | reduced: terminal and single file |
 | iOS Safari | yes | unverified: tab memory limit | reduced |
 
-## Latency budgets (targets, to be confirmed by measurement)
+## Latency budgets and first measurements
 
-| Step | Budget | Baseline |
-|---|---|---|
-| Shell warm start | 300 ms | 0.7 s cold today |
-| Prism app, warm, verified and interactive | 100 ms | PrismPM records 20 to 48 ms for a returning visit of its proof checker |
-| Prism app, cold | 1 s | not measured |
-| Kernel decision | 1 ms | Forge measured 0.003 to 0.2 ms |
-| Linux prompt, resume, warm | 2 s | no resume exists on the default path |
-| Linux prompt, first visit | 5 s plus download | 33 to 58 s cold boot today |
+Measured 2026-11-20 with the emulator Hologram already publishes (`holospaces_web`, 3.1 MB of WebAssembly, RISC-V core, 512 MiB of guest RAM), driven from a dedicated worker by `spike/machine/` in the `holospace-shell` repository. One run per browser, headless, on one Windows desktop, assets fetched from GitHub Pages. They are single measurements, not benchmarks.
+
+| Step | Budget | Chromium | Firefox | WebKit (Playwright build) |
+|---|---|---|---|---|
+| Emulator module loaded | none set | 0.9 s | 1.0 s | 1.3 s |
+| Kernel and root layer fetched (8 MB) | none set | 1.9 s | 3.4 s | 3.6 s |
+| Cold boot to a shell prompt (158 M instructions) | 5 s plus download | 16.8 s | 54.9 s | 10.6 s |
+| Speed while booting | none set | 9.4 MIPS | 2.9 MIPS | 14.9 MIPS |
+| First command after the prompt | none set | 0.4 s | 1.3 s | 0.3 s |
+| Suspend to a snapshot | none set | 0.5 s | 0.2 s | 0.9 s |
+| Resume from a snapshot in memory | 2 s | 0.14 s, plus 1.1 s to unpack | 0.13 s, plus 2.5 s to unpack | crashed |
+| First command after resume | none set | 0.6 s | 2.1 s | not reached |
+
+Not measured: shell warm start against its 300 ms budget, a Prism app cold against its 1 s budget, memory, any phone, real Safari.
+Measured elsewhere in this project: a kernel decision takes about 0.05 ms against a 1 ms budget; a verified Prism app opens in 11 to 27 ms on a returning visit against a 100 ms budget.
+
+What the numbers say:
+- Resume is the product. Resuming takes well under the 2 s budget where it works; cold boot misses its budget in every browser, by 2x to 10x. "Never cold-boot" is confirmed as the design, not a preference.
+- The snapshot is 540 MB raw and 11.5 MB gzipped: almost all of it is empty RAM. Holding it whole is what crashed WebKit, which had the snapshot, its packed copy, its unpacked copy and a new 512 MiB machine in memory at once. A snapshot must be stored and loaded as pages by hash, with empty pages never materialised, and guest RAM must be smaller by default.
+- Firefox runs the same interpreter three to five times slower than the others here. The decoded-block cache is not optional for Firefox.
+- The shared workspace works in both directions today: a file written from the page is read in the guest over 9p, and a file written in the guest is read from the page. That is the primitive gate 4 needs.
+- The shell's line editor asks the terminal for the cursor position and waits; a terminal must answer `ESC[6n`.
 
 ## Build order and gates
 
@@ -101,5 +118,5 @@ Dependency: Prism IDE is a spike and one kernel today. Gate 4 waits on it.
 ## Open
 
 Repository name: proposed `holospace` under Hologram-Technologies. Not created.
-Not measured: instructions per second, Firefox, Safari, any phone, memory, resume time.
-The guest panic on the live site is unexplained.
+Not measured: memory, any phone, real Safari. Instructions per second and resume time now are; see the table above.
+The guest panic seen once on the live site did not recur in three spike runs; unexplained.
