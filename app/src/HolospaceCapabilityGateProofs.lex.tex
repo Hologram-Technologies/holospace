@@ -1,0 +1,840 @@
+\begin{lexlean}{HolospaceCapabilityGateProofs}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{prism.arch@1.0.0}
+\importmodule{HolospaceCapabilityGate}
+\title{Text application model}
+\begin{semanticmodule}
+definition{
+  name: breaksInv001,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
+}
+
+theorem{
+  name: inv001Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv001 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv001
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv002,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerRelayed)))
+}
+
+theorem{
+  name: inv002Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv002 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv002
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv003,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedYes))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
+}
+
+theorem{
+  name: inv003Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv003 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv003
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv004,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
+}
+
+theorem{
+  name: inv004Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv004 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv004
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv005,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerRelayed)))
+}
+
+theorem{
+  name: inv005Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv005 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv005
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv006,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request route) =? (HolospaceCapabilityGate::routeExtension))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
+}
+
+theorem{
+  name: inv006Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv006 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv006
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv007,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request route) =? (HolospaceCapabilityGate::routeNode))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
+}
+
+theorem{
+  name: inv007Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv007 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv007
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv008,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request declared) =? (HolospaceCapabilityGate::declaredNo))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
+}
+
+theorem{
+  name: inv008Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv008 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv008
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv009,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeNo))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
+}
+
+theorem{
+  name: inv009Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv009 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv009
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv010,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request trusted) =? (HolospaceCapabilityGate::trustedNo))) && ((project request resource) =? (HolospaceCapabilityGate::resourceExec))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
+}
+
+theorem{
+  name: inv010Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv010 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv010
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv011,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceShow))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
+}
+
+theorem{
+  name: inv011Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv011 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv011
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv012,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceRead))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
+}
+
+theorem{
+  name: inv012Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv012 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv012
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv013,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceWrite))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
+}
+
+theorem{
+  name: inv013Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv013 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv013
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv014,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceSecrets))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
+}
+
+theorem{
+  name: inv014Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv014 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv014
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv015,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceExec))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
+}
+
+theorem{
+  name: inv015Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv015 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv015
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv016,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  result: Bool,
+  body: ((((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request route) =? (HolospaceCapabilityGate::routeTab))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
+}
+
+theorem{
+  name: inv016Holds,
+  parameters: [request : HolospaceCapabilityGate::Request],
+  statement: ((breaksInv016 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceCapabilityGate::answerAllow,
+      HolospaceCapabilityGate::answerAsk,
+      HolospaceCapabilityGate::answerDeny,
+      HolospaceCapabilityGate::answerRelayed,
+      HolospaceCapabilityGate::declaredNo,
+      HolospaceCapabilityGate::declaredYes,
+      HolospaceCapabilityGate::deniedNo,
+      HolospaceCapabilityGate::deniedYes,
+      HolospaceCapabilityGate::grantedNo,
+      HolospaceCapabilityGate::grantedYes,
+      HolospaceCapabilityGate::inscopeNo,
+      HolospaceCapabilityGate::inscopeYes,
+      HolospaceCapabilityGate::judge,
+      HolospaceCapabilityGate::resourceExec,
+      HolospaceCapabilityGate::resourceNetwork,
+      HolospaceCapabilityGate::resourceRead,
+      HolospaceCapabilityGate::resourceSecrets,
+      HolospaceCapabilityGate::resourceShow,
+      HolospaceCapabilityGate::resourceWrite,
+      HolospaceCapabilityGate::routeExtension,
+      HolospaceCapabilityGate::routeNode,
+      HolospaceCapabilityGate::routeTab,
+      HolospaceCapabilityGate::rule1,
+      HolospaceCapabilityGate::rule2,
+      HolospaceCapabilityGate::rule3,
+      HolospaceCapabilityGate::rule4,
+      HolospaceCapabilityGate::rule5,
+      HolospaceCapabilityGate::rule6,
+      HolospaceCapabilityGate::rule7,
+      HolospaceCapabilityGate::rule8,
+      HolospaceCapabilityGate::rule9,
+      HolospaceCapabilityGate::trustedNo,
+      HolospaceCapabilityGate::trustedYes,
+      breaksInv016
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

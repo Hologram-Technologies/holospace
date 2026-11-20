@@ -1,0 +1,92 @@
+\begin{lexlean}{HolospaceIsolationProofs}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{prism.arch@1.0.0}
+\importmodule{HolospaceIsolation}
+\title{Text application model}
+\begin{semanticmodule}
+definition{
+  name: breaksInv001,
+  parameters: [request : HolospaceIsolation::Request],
+  result: Bool,
+  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindPrivate))) && (not ((project request owner) =? (project request requester)))) && ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow)))
+}
+
+theorem{
+  name: inv001Holds,
+  parameters: [request : HolospaceIsolation::Request],
+  statement: ((breaksInv001 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceIsolation::answerAllow,
+      HolospaceIsolation::answerDeny,
+      HolospaceIsolation::judge,
+      HolospaceIsolation::kindContent,
+      HolospaceIsolation::kindPrivate,
+      HolospaceIsolation::opRead,
+      HolospaceIsolation::opWrite,
+      HolospaceIsolation::rule1,
+      HolospaceIsolation::rule2,
+      breaksInv001
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv002,
+  parameters: [request : HolospaceIsolation::Request],
+  result: Bool,
+  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindContent))) && ((project request op) =? (HolospaceIsolation::opWrite))) && ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow)))
+}
+
+theorem{
+  name: inv002Holds,
+  parameters: [request : HolospaceIsolation::Request],
+  statement: ((breaksInv002 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceIsolation::answerAllow,
+      HolospaceIsolation::answerDeny,
+      HolospaceIsolation::judge,
+      HolospaceIsolation::kindContent,
+      HolospaceIsolation::kindPrivate,
+      HolospaceIsolation::opRead,
+      HolospaceIsolation::opWrite,
+      HolospaceIsolation::rule1,
+      HolospaceIsolation::rule2,
+      breaksInv002
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksInv003,
+  parameters: [request : HolospaceIsolation::Request],
+  result: Bool,
+  body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindPrivate))) && ((project request owner) =? (project request requester))) && (not ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow))))
+}
+
+theorem{
+  name: inv003Holds,
+  parameters: [request : HolospaceIsolation::Request],
+  statement: ((breaksInv003 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceIsolation::answerAllow,
+      HolospaceIsolation::answerDeny,
+      HolospaceIsolation::judge,
+      HolospaceIsolation::kindContent,
+      HolospaceIsolation::kindPrivate,
+      HolospaceIsolation::opRead,
+      HolospaceIsolation::opWrite,
+      HolospaceIsolation::rule1,
+      HolospaceIsolation::rule2,
+      breaksInv003
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

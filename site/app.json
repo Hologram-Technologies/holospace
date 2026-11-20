@@ -1,43 +1,111 @@
 {
-  "name": "Template contract",
-  "shortName": "Contract",
-  "live": "https://uor-foundation.github.io/template/",
-  "purpose": "Checks each universal policy file of a UOR template repository against its locked digest. Send the six expected and observed digests; it answers conformant, or names every file that drifted, and invalid request for anything else.",
-  "inputLabel": "Expected and observed digests",
-  "placeholder": "hex: followed by 384 bytes",
-  "submitLabel": "Check",
-  "outputLabel": "Verdict",
+  "name": "Holospace kernel",
+  "shortName": "Holospace",
+  "live": "https://hologram-technologies.github.io/holospace/",
+  "purpose": "Decides every Holospace question in one proved app: whether an app is verified and may run, whether received bytes are accepted, which stored item a holospace may touch, what a guest may read, write or reach, and which lifecycle step is allowed. Send a kernel word (verdict, admission, isolation, gate or lifecycle) and that kernel's fields.",
+  "inputLabel": "Request: kernel word, then its fields",
+  "placeholder": "verdict intact match consistent passed",
+  "submitLabel": "Decide",
+  "outputLabel": "Answer",
   "answers": {
     "positive": [
-      "conformant"
+      "verified",
+      "accept",
+      "rekey",
+      "allow",
+      "relayed",
+      "started",
+      "paused",
+      "resumed",
+      "ended"
     ],
     "negative": [
-      "drift:*"
+      "blocked",
+      "reject",
+      "retry",
+      "deny",
+      "ask",
+      "refused"
     ],
     "refusal": "invalid request"
   },
   "promise": {
-    "headline": "Says conformant exactly when every policy file matches its lock.",
-    "detail": "Each of the six universal policy files is compared with the digest the lock records, and any file that drifted is named."
+    "headline": "Every Holospace decision is made by a rule Lean has proved things about.",
+    "detail": "Five kernels and an identity encoding, 41 theorems in all, each checked by the Lean kernel when this page was built. The proofs are about the rules; that the shell obeys an answer is tested, not proved."
   },
-  "claim": "TC-01: the checker answers conformant exactly when every universal policy file's observed digest equals its locked digest.",
+  "claim": "HK-01: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise. HK-02: Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import. HK-03: A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content. HK-04: Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow. HK-05: Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate. HK-06: The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one.",
   "proposition": {
-    "name": "Conformant",
-    "text": "Conformant observation :=\n  SameDigest devcontainer.expected devcontainer.observed\n  /\\ SameDigest bootstrap.expected bootstrap.observed\n  /\\ SameDigest agents.expected agents.observed\n  /\\ SameDigest verification.expected verification.observed\n  /\\ SameDigest prismpmLock.expected prismpmLock.observed\n  /\\ SameDigest templateContract.expected templateContract.observed\n\nSameDigest left right :=\n  left.w0 = right.w0 /\\ left.w1 = right.w1 /\\ left.w2 = right.w2 /\\ left.w3 = right.w3",
-    "plain": "Every one of the six universal policy files has the digest the lock says it has."
+    "name": "dispatch",
+    "text": "dispatch request :=\n  verdict ...   -> HolospaceLaunchVerdict.judge\n  admission ... -> HolospaceAdmission.judge\n  isolation ... -> HolospaceIsolation.judge\n  gate ...      -> HolospaceCapabilityGate.judge\n  lifecycle ... -> HolospaceLifecycle.judge\n  otherwise     -> invalid",
+    "plain": "The first word names the kernel, and that kernel's proved rules decide the answer."
   },
   "theorems": [
     {
-      "name": "conformant_decides",
-      "statement": "conformant observation = true ↔ Conformant observation, for every observation",
-      "how": "Proved by simplification over the record fields, checked by the Lean kernel by prismpm verify in CI",
-      "where": "app/src/Contract.lex.tex"
+      "name": "HolospaceLaunchVerdictProofs: 5 theorems",
+      "statement": "An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise",
+      "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
+      "where": "app/src/HolospaceLaunchVerdictProofs.lex.tex"
+    },
+    {
+      "name": "HolospaceAdmissionProofs: 6 theorems",
+      "statement": "Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import",
+      "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
+      "where": "app/src/HolospaceAdmissionProofs.lex.tex"
+    },
+    {
+      "name": "HolospaceIsolationProofs: 3 theorems",
+      "statement": "A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content",
+      "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
+      "where": "app/src/HolospaceIsolationProofs.lex.tex"
+    },
+    {
+      "name": "HolospaceCapabilityGateProofs: 16 theorems",
+      "statement": "Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow",
+      "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
+      "where": "app/src/HolospaceCapabilityGateProofs.lex.tex"
+    },
+    {
+      "name": "HolospaceLifecycleProofs: 8 theorems",
+      "statement": "Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate",
+      "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
+      "where": "app/src/HolospaceLifecycleProofs.lex.tex"
+    },
+    {
+      "name": "HolospaceIdentity: 3 theorems",
+      "statement": "The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one",
+      "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
+      "where": "app/src/HolospaceIdentity.lex.tex"
     }
   ],
   "pinned": [
     {
-      "name": "contract_tc_01",
-      "what": "The theorem's statement and axioms, the six files the proposition names against template-contract.json, that a drifted file is named in the verdict, and that the verdict is decided by conformant. A string-matching test, not a theorem: a planted defect fails it.",
+      "name": "holospace_hk_01",
+      "what": "HK-01: each condition and theorem statement of HolospaceLaunchVerdictProofs, as holospace.pins.tsv records them. A string-matching test, not a theorem: a planted defect fails it.",
+      "where": "crates/conformance/tests/contract.rs"
+    },
+    {
+      "name": "holospace_hk_02",
+      "what": "HK-02: each condition and theorem statement of HolospaceAdmissionProofs, as holospace.pins.tsv records them. A string-matching test, not a theorem: a planted defect fails it.",
+      "where": "crates/conformance/tests/contract.rs"
+    },
+    {
+      "name": "holospace_hk_03",
+      "what": "HK-03: each condition and theorem statement of HolospaceIsolationProofs, as holospace.pins.tsv records them. A string-matching test, not a theorem: a planted defect fails it.",
+      "where": "crates/conformance/tests/contract.rs"
+    },
+    {
+      "name": "holospace_hk_04",
+      "what": "HK-04: each condition and theorem statement of HolospaceCapabilityGateProofs, as holospace.pins.tsv records them. A string-matching test, not a theorem: a planted defect fails it.",
+      "where": "crates/conformance/tests/contract.rs"
+    },
+    {
+      "name": "holospace_hk_05",
+      "what": "HK-05: each condition and theorem statement of HolospaceLifecycleProofs, as holospace.pins.tsv records them. A string-matching test, not a theorem: a planted defect fails it.",
+      "where": "crates/conformance/tests/contract.rs"
+    },
+    {
+      "name": "holospace_hk_06",
+      "what": "HK-06: each condition and theorem statement of HolospaceIdentity, as holospace.pins.tsv records them. A string-matching test, not a theorem: a planted defect fails it.",
       "where": "crates/conformance/tests/contract.rs"
     }
   ],
@@ -65,14 +133,14 @@
   ],
   "attestations": {
     "proof": {
-      "id": "not recorded for the template's own app; an instance records the UOR MCP server's attestation here",
-      "url": "https://github.com/UOR-Foundation/template/actions/workflows/bootstrap.yml"
+      "id": "the proof is checked by prismpm verify in every bootstrap run; its log is the record",
+      "url": "https://github.com/Hologram-Technologies/holospace/actions/workflows/bootstrap.yml"
     },
     "build": {
-      "id": "printed by prismpm verify in every pages run; an instance records it here",
-      "url": "https://github.com/UOR-Foundation/template/actions/workflows/pages.yml"
+      "id": "printed by prismpm verify in every pages run",
+      "url": "https://github.com/Hologram-Technologies/holospace/actions/workflows/pages.yml"
     }
   },
-  "repository": "https://github.com/UOR-Foundation/template",
-  "report": "https://github.com/UOR-Foundation/template/blob/main/TEMPLATE-VERIFICATION.md"
+  "repository": "https://github.com/Hologram-Technologies/holospace",
+  "report": "https://github.com/Hologram-Technologies/holospace/blob/main/TEMPLATE-VERIFICATION.md"
 }

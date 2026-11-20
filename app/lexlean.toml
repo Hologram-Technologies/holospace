@@ -1,9 +1,9 @@
 spec = "lexlean/project/1"
-name = "prism-template-contract"
+name = "prism-holospace-kernel"
 language = "1.2"
-module_prefix = "PrismTemplateContract"
+module_prefix = "PrismHolospace"
 source_roots = ["src"]
-entrypoints = ["src/Contract.lex.tex"]
+entrypoints = ["src/Holospace.lex.tex", "src/HolospaceAdmission.lex.tex", "src/HolospaceAdmissionProofs.lex.tex", "src/HolospaceCapabilityGate.lex.tex", "src/HolospaceCapabilityGateProofs.lex.tex", "src/HolospaceIdentity.lex.tex", "src/HolospaceIsolation.lex.tex", "src/HolospaceIsolationProofs.lex.tex", "src/HolospaceLaunchVerdict.lex.tex", "src/HolospaceLaunchVerdictProofs.lex.tex", "src/HolospaceLifecycle.lex.tex", "src/HolospaceLifecycleProofs.lex.tex"]
 build_root = ".lexlean"
 lockfile = "lexlean.lock"
 lean_workspace = "."

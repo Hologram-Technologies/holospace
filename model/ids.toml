@@ -32,12 +32,6 @@
 spec = "template/1"
 
 [[id]]
-id = "TC-01"
-level = "build"
-suite = "contract"
-statement = "The checker answers conformant exactly when every universal policy file's observed digest equals its locked digest"
-
-[[id]]
 id = "FR-01"
 level = "build"
 suite = "frame"
@@ -66,3 +60,39 @@ id = "FR-05"
 level = "build"
 suite = "frame"
 statement = "An app's pages on every device of one Prism ID meet on a relay topic only those devices derive, per app, with every message sealed to the ID, and a removed device is left behind"
+
+[[id]]
+id = "HK-01"
+level = "build"
+suite = "holospace"
+statement = "An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise"
+
+[[id]]
+id = "HK-02"
+level = "build"
+suite = "holospace"
+statement = "Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import"
+
+[[id]]
+id = "HK-03"
+level = "build"
+suite = "holospace"
+statement = "A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content"
+
+[[id]]
+id = "HK-04"
+level = "build"
+suite = "holospace"
+statement = "Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow"
+
+[[id]]
+id = "HK-05"
+level = "build"
+suite = "holospace"
+statement = "Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate"
+
+[[id]]
+id = "HK-06"
+level = "build"
+suite = "holospace"
+statement = "The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one"

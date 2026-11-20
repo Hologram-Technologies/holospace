@@ -18,12 +18,6 @@ The three honesty levels (R2):
 `cargo xtask audit-limits` fails if any code path returns an error the
 model does not sanction.
 
-## contract
-
-| ID | Level | Statement |
-| --- | --- | --- |
-| `TC-01` | `build` | The checker answers conformant exactly when every universal policy file's observed digest equals its locked digest |
-
 ## frame
 
 | ID | Level | Statement |
@@ -33,6 +27,17 @@ model does not sanction.
 | `FR-03` | `build` | A first visit's bytes are counted once the page has started, the frame's and the app's each within its own budget |
 | `FR-04` | `build` | An app's workspace key opens only on a device of the Prism ID that made it, follows the ID when it joins or is recovered, and stays locked on a removed device |
 | `FR-05` | `build` | An app's pages on every device of one Prism ID meet on a relay topic only those devices derive, per app, with every message sealed to the ID, and a removed device is left behind |
+
+## holospace
+
+| ID | Level | Statement |
+| --- | --- | --- |
+| `HK-01` | `build` | An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise |
+| `HK-02` | `build` | Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import |
+| `HK-03` | `build` | A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content |
+| `HK-04` | `build` | Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow |
+| `HK-05` | `build` | Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate |
+| `HK-06` | `build` | The same definition and architecture give the same encoding, and a different architecture or definition always gives a different one |
 
 ## Cited authorities
 

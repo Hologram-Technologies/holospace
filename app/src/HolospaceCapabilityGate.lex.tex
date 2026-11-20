@@ -1,0 +1,339 @@
+\begin{lexlean}{HolospaceCapabilityGate}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{prism.arch@1.0.0}
+\importmodule{Foundation.Bytes}
+\importmodule{Foundation.View.Text.V1.Model}
+\title{Text application model}
+\begin{semanticmodule}
+definition{name: resourceShow, parameters: [], result: Nat, body: 0}
+
+definition{name: resourceRead, parameters: [], result: Nat, body: 1}
+
+definition{name: resourceWrite, parameters: [], result: Nat, body: 2}
+
+definition{name: resourceNetwork, parameters: [], result: Nat, body: 3}
+
+definition{name: resourceSecrets, parameters: [], result: Nat, body: 4}
+
+definition{name: resourceExec, parameters: [], result: Nat, body: 5}
+
+definition{name: declaredNo, parameters: [], result: Nat, body: 0}
+
+definition{name: declaredYes, parameters: [], result: Nat, body: 1}
+
+definition{name: deniedNo, parameters: [], result: Nat, body: 0}
+
+definition{name: deniedYes, parameters: [], result: Nat, body: 1}
+
+definition{name: trustedNo, parameters: [], result: Nat, body: 0}
+
+definition{name: trustedYes, parameters: [], result: Nat, body: 1}
+
+definition{name: inscopeNo, parameters: [], result: Nat, body: 0}
+
+definition{name: inscopeYes, parameters: [], result: Nat, body: 1}
+
+definition{name: grantedNo, parameters: [], result: Nat, body: 0}
+
+definition{name: grantedYes, parameters: [], result: Nat, body: 1}
+
+definition{name: routeTab, parameters: [], result: Nat, body: 0}
+
+definition{name: routeExtension, parameters: [], result: Nat, body: 1}
+
+definition{name: routeNode, parameters: [], result: Nat, body: 2}
+
+definition{name: answerDeny, parameters: [], result: Nat, body: 0}
+
+definition{name: answerAsk, parameters: [], result: Nat, body: 1}
+
+definition{name: answerAllow, parameters: [], result: Nat, body: 2}
+
+definition{name: answerRelayed, parameters: [], result: Nat, body: 3}
+
+structure{
+  name: Request,
+  type_parameters: [],
+  parameters: [],
+  fields: [
+    {name: resource, type: Nat},
+    {name: declared, type: Nat},
+    {name: denied, type: Nat},
+    {name: trusted, type: Nat},
+    {name: inscope, type: Nat},
+    {name: granted, type: Nat},
+    {name: route, type: Nat}
+  ]
+}
+
+definition{
+  name: byteAt,
+  parameters: [s : Bytes, i : Nat],
+  result: (Option Nat),
+  body: (match (prim index s i : (Option UInt8))
+    | Option.none => (ctor Option.none [Nat])
+    | Option.some b => (ctor Option.some [Nat] (prim to_nat b : Nat))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: digitsValue,
+  parameters: [s : Bytes, i : Nat, acc : Nat, fuel : Nat],
+  result: (Option Nat),
+  body: (match fuel
+    | Nat.zero => (ctor Option.some [Nat] acc)
+    | Nat.succ rest => (match (byteAt s i)
+      | Option.none => (ctor Option.none [Nat])
+      | Option.some d => (if ((d <? 48) || (57 <? d)) then (ctor Option.none [Nat]) else (digitsValue s (i + 1) ((prim multiply acc 10 : Nat) + (prim subtract d 48 : Nat)) rest)))),
+  axioms: [Quot.sound, propext],
+  recursive_argument: fuel
+}
+
+definition{
+  name: parseDigits,
+  parameters: [s : Bytes],
+  result: (Option Nat),
+  body: (if ((Foundation.Bytes::byteLength s) =? 0) then (ctor Option.none [Nat]) else (if (18 <? (Foundation.Bytes::byteLength s)) then (ctor Option.none [Nat]) else (match (byteAt s 0)
+    | Option.none => (ctor Option.none [Nat])
+    | Option.some lead => (if ((lead =? 48) && (1 <? (Foundation.Bytes::byteLength s))) then (ctor Option.none [Nat]) else (digitsValue s 0 0 (Foundation.Bytes::byteLength s)))))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: parseNumber,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (parseDigits value),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: parseResource,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x73686f77 : Bool) then (ctor Option.some [Nat] (resourceShow)) else (if (prim equal value 0x72656164 : Bool) then (ctor Option.some [Nat] (resourceRead)) else (if (prim equal value 0x7772697465 : Bool) then (ctor Option.some [Nat] (resourceWrite)) else (if (prim equal value 0x6e6574776f726b : Bool) then (ctor Option.some [Nat] (resourceNetwork)) else (if (prim equal value 0x73656372657473 : Bool) then (ctor Option.some [Nat] (resourceSecrets)) else (if (prim equal value 0x65786563 : Bool) then (ctor Option.some [Nat] (resourceExec)) else (ctor Option.none [Nat])))))))
+}
+
+definition{
+  name: parseDeclared,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (declaredNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (declaredYes)) else (ctor Option.none [Nat])))
+}
+
+definition{
+  name: parseDenied,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (deniedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (deniedYes)) else (ctor Option.none [Nat])))
+}
+
+definition{
+  name: parseTrusted,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (trustedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (trustedYes)) else (ctor Option.none [Nat])))
+}
+
+definition{
+  name: parseInscope,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (inscopeNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (inscopeYes)) else (ctor Option.none [Nat])))
+}
+
+definition{
+  name: parseGranted,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x6e6f : Bool) then (ctor Option.some [Nat] (grantedNo)) else (if (prim equal value 0x796573 : Bool) then (ctor Option.some [Nat] (grantedYes)) else (ctor Option.none [Nat])))
+}
+
+definition{
+  name: parseRoute,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x746162 : Bool) then (ctor Option.some [Nat] (routeTab)) else (if (prim equal value 0x657874656e73696f6e : Bool) then (ctor Option.some [Nat] (routeExtension)) else (if (prim equal value 0x6e6f6465 : Bool) then (ctor Option.some [Nat] (routeNode)) else (ctor Option.none [Nat]))))
+}
+
+definition{
+  name: sliceOf,
+  parameters: [s : Bytes, start : Nat, count : Nat],
+  result: Bytes,
+  body: (match (prim slice s start count : (Option Bytes))
+    | Option.none => 0x
+    | Option.some part => part)
+}
+
+definition{
+  name: fieldEnd,
+  parameters: [s : Bytes, i : Nat, fuel : Nat],
+  result: Nat,
+  body: (match fuel
+    | Nat.zero => i
+    | Nat.succ rest => (match (byteAt s i)
+      | Option.none => i
+      | Option.some d => (if (d =? 32) then i else (fieldEnd s (i + 1) rest)))),
+  axioms: [Quot.sound, propext],
+  recursive_argument: fuel
+}
+
+definition{
+  name: decodeField7,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat, v5 : Nat, v6 : Nat],
+  result: (Option Request),
+  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseRoute (sliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [Request])
+    | Option.some v7 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [Request] (record Request {resource := v1, declared := v2, denied := v3, trusted := v4, inscope := v5, granted := v6, route := v7})) else (ctor Option.none [Request])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: decodeField6,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat, v5 : Nat],
+  result: (Option Request),
+  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseGranted (sliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [Request])
+    | Option.some v6 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField7 s (e + 1) v1 v2 v3 v4 v5 v6) else (ctor Option.none [Request])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: decodeField5,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat],
+  result: (Option Request),
+  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseInscope (sliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [Request])
+    | Option.some v5 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField6 s (e + 1) v1 v2 v3 v4 v5) else (ctor Option.none [Request])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: decodeField4,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
+  result: (Option Request),
+  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseTrusted (sliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [Request])
+    | Option.some v4 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField5 s (e + 1) v1 v2 v3 v4) else (ctor Option.none [Request])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: decodeField3,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
+  result: (Option Request),
+  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseDenied (sliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [Request])
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [Request])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: decodeField2,
+  parameters: [s : Bytes, start : Nat, v1 : Nat],
+  result: (Option Request),
+  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseDeclared (sliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [Request])
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [Request])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: decodeField1,
+  parameters: [s : Bytes, start : Nat],
+  result: (Option Request),
+  body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseResource (sliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [Request])
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [Request])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: rule1,
+  parameters: [request : Request],
+  result: Bool,
+  body: ((project request denied) =? (deniedYes))
+}
+
+definition{
+  name: rule2,
+  parameters: [request : Request],
+  result: Bool,
+  body: ((project request declared) =? (declaredNo))
+}
+
+definition{
+  name: rule3,
+  parameters: [request : Request],
+  result: Bool,
+  body: ((project request inscope) =? (inscopeNo))
+}
+
+definition{
+  name: rule4,
+  parameters: [request : Request],
+  result: Bool,
+  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceWrite)))
+}
+
+definition{
+  name: rule5,
+  parameters: [request : Request],
+  result: Bool,
+  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceNetwork)))
+}
+
+definition{
+  name: rule6,
+  parameters: [request : Request],
+  result: Bool,
+  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceSecrets)))
+}
+
+definition{
+  name: rule7,
+  parameters: [request : Request],
+  result: Bool,
+  body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceExec)))
+}
+
+definition{
+  name: rule8,
+  parameters: [request : Request],
+  result: Bool,
+  body: ((((project request granted) =? (grantedYes)) && ((project request resource) =? (resourceNetwork))) && (not ((project request route) =? (routeTab))))
+}
+
+definition{
+  name: rule9,
+  parameters: [request : Request],
+  result: Bool,
+  body: ((project request granted) =? (grantedYes))
+}
+
+definition{
+  name: judge,
+  parameters: [request : Request],
+  result: Nat,
+  body: (if (rule1 request) then (answerDeny) else (if (rule2 request) then (answerDeny) else (if (rule3 request) then (answerDeny) else (if (rule4 request) then (answerDeny) else (if (rule5 request) then (answerDeny) else (if (rule6 request) then (answerDeny) else (if (rule7 request) then (answerDeny) else (if (rule8 request) then (answerRelayed) else (if (rule9 request) then (answerAllow) else (answerAsk))))))))))
+}
+
+definition{
+  name: encodeAnswer,
+  parameters: [code : Nat],
+  result: Bytes,
+  body: (if (code =? (answerDeny)) then 0x64656e79 else (if (code =? (answerAsk)) then 0x61736b else (if (code =? (answerAllow)) then 0x616c6c6f77 else (if (code =? (answerRelayed)) then 0x72656c61796564 else 0x696e76616c6964))))
+}
+
+definition{
+  name: dispatch,
+  parameters: [value : Bytes],
+  result: Bytes,
+  body: (if (184 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (decodeField1 value 0)
+    | Option.none => 0x696e76616c6964
+    | Option.some request => (encodeAnswer (judge request)))),
+  axioms: [Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}

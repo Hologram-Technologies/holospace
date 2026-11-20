@@ -1,0 +1,73 @@
+\begin{lexlean}{HolospaceIdentity}
+\useglossary{lexlean.std.bool@1.2.0}
+\useglossary{lexlean.std.nat@1.2.0}
+\useglossary{prism.arch@1.0.0}
+\title{Text application model}
+\begin{semanticmodule}
+definition{name: archRiscv64, parameters: [], result: Nat, body: 0}
+
+definition{name: archAarch64, parameters: [], result: Nat, body: 1}
+
+definition{name: archX8664, parameters: [], result: Nat, body: 2}
+
+definition{name: archCount, parameters: [], result: Nat, body: 3}
+
+definition{
+  name: encode,
+  parameters: [definition : Nat, arch : Nat],
+  result: Nat,
+  body: ((prim multiply definition 3 : Nat) + arch)
+}
+
+definition{
+  name: breaksSameGivesSame,
+  parameters: [d1 : Nat, a1 : Nat, d2 : Nat, a2 : Nat],
+  result: Bool,
+  body: (((d1 =? d2) && (a1 =? a2)) && (not ((encode d1 a1) =? (encode d2 a2))))
+}
+
+theorem{
+  name: sameGivesSame,
+  parameters: [d1 : Nat, a1 : Nat, d2 : Nat, a2 : Nat],
+  statement: ((breaksSameGivesSame d1 a1 d2 a2) = false),
+  proof: linear_arithmetic{
+    definitions: [breaksSameGivesSame, encode]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksArchChangesIdentity,
+  parameters: [d : Nat, a1 : Nat, a2 : Nat],
+  result: Bool,
+  body: ((not (a1 =? a2)) && ((encode d a1) =? (encode d a2)))
+}
+
+theorem{
+  name: archChangesIdentity,
+  parameters: [d : Nat, a1 : Nat, a2 : Nat],
+  statement: ((breaksArchChangesIdentity d a1 a2) = false),
+  proof: linear_arithmetic{
+    definitions: [breaksArchChangesIdentity, encode]
+  },
+  axioms: [Quot.sound, propext]
+}
+
+definition{
+  name: breaksEncodingInjective,
+  parameters: [d1 : Nat, a1 : Nat, d2 : Nat, a2 : Nat],
+  result: Bool,
+  body: ((((a1 <? (archCount)) && (a2 <? (archCount))) && ((encode d1 a1) =? (encode d2 a2))) && (not ((d1 =? d2) && (a1 =? a2))))
+}
+
+theorem{
+  name: encodingInjective,
+  parameters: [d1 : Nat, a1 : Nat, d2 : Nat, a2 : Nat],
+  statement: ((breaksEncodingInjective d1 a1 d2 a2) = false),
+  proof: linear_arithmetic{
+    definitions: [archCount, breaksEncodingInjective, encode]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
+\end{semanticmodule}
+\end{lexlean}
