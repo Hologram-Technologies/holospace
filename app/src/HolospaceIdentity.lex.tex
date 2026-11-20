@@ -83,7 +83,7 @@ theorem{
   parameters: [arch : Nat, digest : Nat],
   statement: ((breaksPreimageFits arch digest) = false),
   proof: linear_arithmetic{definitions: [archCount, breaksPreimageFits, digestBound, encode]},
-  axioms: [Classical.choice, Quot.sound, propext]
+  axioms: [Quot.sound, propext]
 }
 \end{semanticmodule}
 \end{lexlean}
