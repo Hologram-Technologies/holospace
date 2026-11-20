@@ -30,9 +30,7 @@ theorem{
   name: sameGivesSame,
   parameters: [d1 : Nat, a1 : Nat, d2 : Nat, a2 : Nat],
   statement: ((breaksSameGivesSame d1 a1 d2 a2) = false),
-  proof: linear_arithmetic{
-    definitions: [breaksSameGivesSame, encode]
-  },
+  proof: linear_arithmetic{definitions: [breaksSameGivesSame, encode]},
   axioms: [Quot.sound, propext]
 }
 
@@ -47,9 +45,7 @@ theorem{
   name: archChangesIdentity,
   parameters: [d : Nat, a1 : Nat, a2 : Nat],
   statement: ((breaksArchChangesIdentity d a1 a2) = false),
-  proof: linear_arithmetic{
-    definitions: [breaksArchChangesIdentity, encode]
-  },
+  proof: linear_arithmetic{definitions: [breaksArchChangesIdentity, encode]},
   axioms: [Quot.sound, propext]
 }
 
@@ -64,9 +60,7 @@ theorem{
   name: encodingInjective,
   parameters: [d1 : Nat, a1 : Nat, d2 : Nat, a2 : Nat],
   statement: ((breaksEncodingInjective d1 a1 d2 a2) = false),
-  proof: linear_arithmetic{
-    definitions: [archCount, breaksEncodingInjective, encode]
-  },
+  proof: linear_arithmetic{definitions: [archCount, breaksEncodingInjective, encode]},
   axioms: [Classical.choice, Quot.sound, propext]
 }
 \end{semanticmodule}
