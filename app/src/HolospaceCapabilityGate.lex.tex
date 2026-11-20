@@ -53,7 +53,7 @@ definition{name: answerAllow, parameters: [], result: Nat, body: 2}
 definition{name: answerRelayed, parameters: [], result: Nat, body: 3}
 
 structure{
-  name: Request,
+  name: GateRequest,
   type_parameters: [],
   parameters: [],
   fields: [
@@ -182,139 +182,139 @@ definition{
 definition{
   name: decodeField7,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat, v5 : Nat, v6 : Nat],
-  result: (Option Request),
+  result: (Option GateRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseRoute (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v7 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [Request] (record Request {resource := v1, declared := v2, denied := v3, trusted := v4, inscope := v5, granted := v6, route := v7})) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [GateRequest])
+    | Option.some v7 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [GateRequest] (record GateRequest {resource := v1, declared := v2, denied := v3, trusted := v4, inscope := v5, granted := v6, route := v7})) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField6,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat, v5 : Nat],
-  result: (Option Request),
+  result: (Option GateRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseGranted (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v6 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField7 s (e + 1) v1 v2 v3 v4 v5 v6) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [GateRequest])
+    | Option.some v6 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField7 s (e + 1) v1 v2 v3 v4 v5 v6) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField5,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat],
-  result: (Option Request),
+  result: (Option GateRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseInscope (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v5 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField6 s (e + 1) v1 v2 v3 v4 v5) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [GateRequest])
+    | Option.some v5 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField6 s (e + 1) v1 v2 v3 v4 v5) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField4,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
-  result: (Option Request),
+  result: (Option GateRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseTrusted (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v4 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField5 s (e + 1) v1 v2 v3 v4) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [GateRequest])
+    | Option.some v4 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField5 s (e + 1) v1 v2 v3 v4) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
-  result: (Option Request),
+  result: (Option GateRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseDenied (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [GateRequest])
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
-  result: (Option Request),
+  result: (Option GateRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseDeclared (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [GateRequest])
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField1,
   parameters: [s : Bytes, start : Nat],
-  result: (Option Request),
+  result: (Option GateRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseResource (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [GateRequest])
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [GateRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: rule1,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: ((project request denied) =? (deniedYes))
 }
 
 definition{
   name: rule2,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: ((project request declared) =? (declaredNo))
 }
 
 definition{
   name: rule3,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: ((project request inscope) =? (inscopeNo))
 }
 
 definition{
   name: rule4,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceWrite)))
 }
 
 definition{
   name: rule5,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceNetwork)))
 }
 
 definition{
   name: rule6,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceSecrets)))
 }
 
 definition{
   name: rule7,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: (((project request trusted) =? (trustedNo)) && ((project request resource) =? (resourceExec)))
 }
 
 definition{
   name: rule8,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: ((((project request granted) =? (grantedYes)) && ((project request resource) =? (resourceNetwork))) && (not ((project request route) =? (routeTab))))
 }
 
 definition{
   name: rule9,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Bool,
   body: ((project request granted) =? (grantedYes))
 }
 
 definition{
   name: judge,
-  parameters: [request : Request],
+  parameters: [request : GateRequest],
   result: Nat,
   body: (if (rule1 request) then (answerDeny) else (if (rule2 request) then (answerDeny) else (if (rule3 request) then (answerDeny) else (if (rule4 request) then (answerDeny) else (if (rule5 request) then (answerDeny) else (if (rule6 request) then (answerDeny) else (if (rule7 request) then (answerDeny) else (if (rule8 request) then (answerRelayed) else (if (rule9 request) then (answerAllow) else (answerAsk))))))))))
 }

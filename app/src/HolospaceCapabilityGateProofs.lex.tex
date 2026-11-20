@@ -7,14 +7,14 @@
 \begin{semanticmodule}
 definition{
   name: breaksInv001,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
 }
 
 theorem{
   name: inv001Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -59,14 +59,14 @@ theorem{
 
 definition{
   name: breaksInv002,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerRelayed)))
 }
 
 theorem{
   name: inv002Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -111,14 +111,14 @@ theorem{
 
 definition{
   name: breaksInv003,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedYes))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
 }
 
 theorem{
   name: inv003Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -163,14 +163,14 @@ theorem{
 
 definition{
   name: breaksInv004,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
 }
 
 theorem{
   name: inv004Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv004 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -215,14 +215,14 @@ theorem{
 
 definition{
   name: breaksInv005,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request granted) =? (HolospaceCapabilityGate::grantedNo))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerRelayed)))
 }
 
 theorem{
   name: inv005Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv005 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -267,14 +267,14 @@ theorem{
 
 definition{
   name: breaksInv006,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request route) =? (HolospaceCapabilityGate::routeExtension))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
 }
 
 theorem{
   name: inv006Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv006 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -319,14 +319,14 @@ theorem{
 
 definition{
   name: breaksInv007,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request route) =? (HolospaceCapabilityGate::routeNode))) && ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow)))
 }
 
 theorem{
   name: inv007Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv007 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -371,14 +371,14 @@ theorem{
 
 definition{
   name: breaksInv008,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request declared) =? (HolospaceCapabilityGate::declaredNo))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
 }
 
 theorem{
   name: inv008Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv008 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -423,14 +423,14 @@ theorem{
 
 definition{
   name: breaksInv009,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: ((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeNo))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
 }
 
 theorem{
   name: inv009Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv009 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -475,14 +475,14 @@ theorem{
 
 definition{
   name: breaksInv010,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request trusted) =? (HolospaceCapabilityGate::trustedNo))) && ((project request resource) =? (HolospaceCapabilityGate::resourceExec))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerDeny))))
 }
 
 theorem{
   name: inv010Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv010 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -527,14 +527,14 @@ theorem{
 
 definition{
   name: breaksInv011,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceShow))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
 }
 
 theorem{
   name: inv011Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv011 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -579,14 +579,14 @@ theorem{
 
 definition{
   name: breaksInv012,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceRead))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
 }
 
 theorem{
   name: inv012Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv012 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -631,14 +631,14 @@ theorem{
 
 definition{
   name: breaksInv013,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceWrite))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
 }
 
 theorem{
   name: inv013Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv013 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -683,14 +683,14 @@ theorem{
 
 definition{
   name: breaksInv014,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceSecrets))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
 }
 
 theorem{
   name: inv014Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv014 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -735,14 +735,14 @@ theorem{
 
 definition{
   name: breaksInv015,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: (((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceExec))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
 }
 
 theorem{
   name: inv015Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv015 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -787,14 +787,14 @@ theorem{
 
 definition{
   name: breaksInv016,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   result: Bool,
   body: ((((((((((((((((project request resource) <? 6) && ((project request declared) <? 2)) && ((project request denied) <? 2)) && ((project request trusted) <? 2)) && ((project request inscope) <? 2)) && ((project request granted) <? 2)) && ((project request route) <? 3)) && ((project request denied) =? (HolospaceCapabilityGate::deniedNo))) && ((project request declared) =? (HolospaceCapabilityGate::declaredYes))) && ((project request inscope) =? (HolospaceCapabilityGate::inscopeYes))) && ((project request trusted) =? (HolospaceCapabilityGate::trustedYes))) && ((project request granted) =? (HolospaceCapabilityGate::grantedYes))) && ((project request resource) =? (HolospaceCapabilityGate::resourceNetwork))) && ((project request route) =? (HolospaceCapabilityGate::routeTab))) && (not ((HolospaceCapabilityGate::judge request) =? (HolospaceCapabilityGate::answerAllow))))
 }
 
 theorem{
   name: inv016Holds,
-  parameters: [request : HolospaceCapabilityGate::Request],
+  parameters: [request : HolospaceCapabilityGate::GateRequest],
   statement: ((breaksInv016 request) = false),
   proof: linear_arithmetic{
     definitions: [

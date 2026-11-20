@@ -7,14 +7,14 @@
 \begin{semanticmodule}
 definition{
   name: breaksInv001,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
   body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request seal) =? (HolospaceLaunchVerdict::sealBroken))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
 }
 
 theorem{
   name: inv001Holds,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   statement: ((breaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -39,14 +39,14 @@ theorem{
 
 definition{
   name: breaksInv002,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
   body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request members) =? (HolospaceLaunchVerdict::membersDiffer))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
 }
 
 theorem{
   name: inv002Holds,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   statement: ((breaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -71,14 +71,14 @@ theorem{
 
 definition{
   name: breaksInv003,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
   body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request provenance) =? (HolospaceLaunchVerdict::provenanceInconsistent))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
 }
 
 theorem{
   name: inv003Holds,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   statement: ((breaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -103,14 +103,14 @@ theorem{
 
 definition{
   name: breaksInv004,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
   body: (((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && (not ((project request vectors) =? (HolospaceLaunchVerdict::vectorsPassed)))) && ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified)))
 }
 
 theorem{
   name: inv004Holds,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   statement: ((breaksInv004 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -135,14 +135,14 @@ theorem{
 
 definition{
   name: breaksInv005,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   result: Bool,
   body: ((((((((((project request seal) <? 2) && ((project request members) <? 2)) && ((project request provenance) <? 2)) && ((project request vectors) <? 3)) && ((project request seal) =? (HolospaceLaunchVerdict::sealIntact))) && ((project request members) =? (HolospaceLaunchVerdict::membersMatch))) && ((project request provenance) =? (HolospaceLaunchVerdict::provenanceConsistent))) && ((project request vectors) =? (HolospaceLaunchVerdict::vectorsPassed))) && (not ((HolospaceLaunchVerdict::judge request) =? (HolospaceLaunchVerdict::answerVerified))))
 }
 
 theorem{
   name: inv005Holds,
-  parameters: [request : HolospaceLaunchVerdict::Request],
+  parameters: [request : HolospaceLaunchVerdict::VerdictRequest],
   statement: ((breaksInv005 request) = false),
   proof: linear_arithmetic{
     definitions: [

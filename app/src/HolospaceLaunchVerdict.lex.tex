@@ -29,7 +29,7 @@ definition{name: answerVerified, parameters: [], result: Nat, body: 0}
 definition{name: answerBlocked, parameters: [], result: Nat, body: 1}
 
 structure{
-  name: Request,
+  name: VerdictRequest,
   type_parameters: [],
   parameters: [],
   fields: [
@@ -134,53 +134,53 @@ definition{
 definition{
   name: decodeField4,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
-  result: (Option Request),
+  result: (Option VerdictRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseVectors (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [Request] (record Request {seal := v1, members := v2, provenance := v3, vectors := v4})) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [VerdictRequest])
+    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [VerdictRequest] (record VerdictRequest {seal := v1, members := v2, provenance := v3, vectors := v4})) else (ctor Option.none [VerdictRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
-  result: (Option Request),
+  result: (Option VerdictRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseProvenance (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [VerdictRequest])
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [VerdictRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
-  result: (Option Request),
+  result: (Option VerdictRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseMembers (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [VerdictRequest])
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [VerdictRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField1,
   parameters: [s : Bytes, start : Nat],
-  result: (Option Request),
+  result: (Option VerdictRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseSeal (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [VerdictRequest])
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [VerdictRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: rule1,
-  parameters: [request : Request],
+  parameters: [request : VerdictRequest],
   result: Bool,
   body: (((((project request seal) =? (sealIntact)) && ((project request members) =? (membersMatch))) && ((project request provenance) =? (provenanceConsistent))) && ((project request vectors) =? (vectorsPassed)))
 }
 
 definition{
   name: judge,
-  parameters: [request : Request],
+  parameters: [request : VerdictRequest],
   result: Nat,
   body: (if (rule1 request) then (answerVerified) else (answerBlocked))
 }

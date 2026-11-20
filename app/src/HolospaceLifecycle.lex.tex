@@ -37,7 +37,7 @@ definition{name: answerEnded, parameters: [], result: Nat, body: 3}
 definition{name: answerRefused, parameters: [], result: Nat, body: 4}
 
 structure{
-  name: Request,
+  name: LifecycleRequest,
   type_parameters: [],
   parameters: [],
   fields: [{name: phase, type: Nat}, {name: snapshot, type: Nat}, {name: action, type: Nat}]
@@ -130,64 +130,64 @@ definition{
 definition{
   name: decodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
-  result: (Option Request),
+  result: (Option LifecycleRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseAction (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v3 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [Request] (record Request {phase := v1, snapshot := v2, action := v3})) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [LifecycleRequest])
+    | Option.some v3 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [LifecycleRequest] (record LifecycleRequest {phase := v1, snapshot := v2, action := v3})) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
-  result: (Option Request),
+  result: (Option LifecycleRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseSnapshot (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [LifecycleRequest])
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField1,
   parameters: [s : Bytes, start : Nat],
-  result: (Option Request),
+  result: (Option LifecycleRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parsePhase (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [LifecycleRequest])
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [LifecycleRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: rule1,
-  parameters: [request : Request],
+  parameters: [request : LifecycleRequest],
   result: Bool,
   body: (((project request phase) =? (phaseProvisioned)) && ((project request action) =? (actionStart)))
 }
 
 definition{
   name: rule2,
-  parameters: [request : Request],
+  parameters: [request : LifecycleRequest],
   result: Bool,
   body: (((project request phase) =? (phaseRunning)) && ((project request action) =? (actionSuspend)))
 }
 
 definition{
   name: rule3,
-  parameters: [request : Request],
+  parameters: [request : LifecycleRequest],
   result: Bool,
   body: ((((project request phase) =? (phaseSuspended)) && ((project request snapshot) =? (snapshotKept))) && ((project request action) =? (actionResume)))
 }
 
 definition{
   name: rule4,
-  parameters: [request : Request],
+  parameters: [request : LifecycleRequest],
   result: Bool,
   body: ((not ((project request phase) =? (phaseTerminated))) && ((project request action) =? (actionTerminate)))
 }
 
 definition{
   name: judge,
-  parameters: [request : Request],
+  parameters: [request : LifecycleRequest],
   result: Nat,
   body: (if (rule1 request) then (answerStarted) else (if (rule2 request) then (answerPaused) else (if (rule3 request) then (answerResumed) else (if (rule4 request) then (answerEnded) else (answerRefused)))))
 }

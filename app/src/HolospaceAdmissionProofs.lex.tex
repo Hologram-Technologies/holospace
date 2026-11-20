@@ -7,14 +7,14 @@
 \begin{semanticmodule}
 definition{
   name: breaksInv001,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
   body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::labelDiffers))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerAccept)))
 }
 
 theorem{
   name: inv001Holds,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   statement: ((breaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -42,14 +42,14 @@ theorem{
 
 definition{
   name: breaksInv002,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
   body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::labelDiffers))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerRekey)))
 }
 
 theorem{
   name: inv002Holds,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   statement: ((breaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -77,14 +77,14 @@ theorem{
 
 definition{
   name: breaksInv003,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
   body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request axis) =? (HolospaceAdmission::axisSha256))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerAccept)))
 }
 
 theorem{
   name: inv003Holds,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   statement: ((breaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -112,14 +112,14 @@ theorem{
 
 definition{
   name: breaksInv004,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
   body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request stage) =? (HolospaceAdmission::stageRuntime))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerRekey)))
 }
 
 theorem{
   name: inv004Holds,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   statement: ((breaksInv004 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -147,14 +147,14 @@ theorem{
 
 definition{
   name: breaksInv005,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
   body: (((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request sources) =? (HolospaceAdmission::sourcesNone))) && ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerRetry)))
 }
 
 theorem{
   name: inv005Holds,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   statement: ((breaksInv005 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -182,14 +182,14 @@ theorem{
 
 definition{
   name: breaksInv006,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   result: Bool,
   body: ((((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::labelDiffers))) && ((project request sources) =? (HolospaceAdmission::sourcesNone))) && (not ((HolospaceAdmission::judge request) =? (HolospaceAdmission::answerReject))))
 }
 
 theorem{
   name: inv006Holds,
-  parameters: [request : HolospaceAdmission::Request],
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
   statement: ((breaksInv006 request) = false),
   proof: linear_arithmetic{
     definitions: [

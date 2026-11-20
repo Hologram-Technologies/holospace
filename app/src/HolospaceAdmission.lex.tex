@@ -31,7 +31,7 @@ definition{name: answerRetry, parameters: [], result: Nat, body: 2}
 definition{name: answerReject, parameters: [], result: Nat, body: 3}
 
 structure{
-  name: Request,
+  name: AdmissionRequest,
   type_parameters: [],
   parameters: [],
   fields: [
@@ -136,67 +136,67 @@ definition{
 definition{
   name: decodeField4,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
-  result: (Option Request),
+  result: (Option AdmissionRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseSources (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [Request] (record Request {label := v1, axis := v2, stage := v3, sources := v4})) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [AdmissionRequest])
+    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [AdmissionRequest] (record AdmissionRequest {label := v1, axis := v2, stage := v3, sources := v4})) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
-  result: (Option Request),
+  result: (Option AdmissionRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseStage (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [AdmissionRequest])
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
-  result: (Option Request),
+  result: (Option AdmissionRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseAxis (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [AdmissionRequest])
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField1,
   parameters: [s : Bytes, start : Nat],
-  result: (Option Request),
+  result: (Option AdmissionRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseLabel (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [AdmissionRequest])
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [AdmissionRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: rule1,
-  parameters: [request : Request],
+  parameters: [request : AdmissionRequest],
   result: Bool,
   body: (((project request label) =? (labelMatches)) && ((project request axis) =? (axisBlake3)))
 }
 
 definition{
   name: rule2,
-  parameters: [request : Request],
+  parameters: [request : AdmissionRequest],
   result: Bool,
   body: ((((project request label) =? (labelMatches)) && ((project request axis) =? (axisSha256))) && ((project request stage) =? (stageImport)))
 }
 
 definition{
   name: rule3,
-  parameters: [request : Request],
+  parameters: [request : AdmissionRequest],
   result: Bool,
   body: (((project request label) =? (labelDiffers)) && ((project request sources) =? (sourcesMore)))
 }
 
 definition{
   name: judge,
-  parameters: [request : Request],
+  parameters: [request : AdmissionRequest],
   result: Nat,
   body: (if (rule1 request) then (answerAccept) else (if (rule2 request) then (answerRekey) else (if (rule3 request) then (answerRetry) else (answerReject))))
 }

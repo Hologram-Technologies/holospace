@@ -7,14 +7,14 @@
 \begin{semanticmodule}
 definition{
   name: breaksInv001,
-  parameters: [request : HolospaceIsolation::Request],
+  parameters: [request : HolospaceIsolation::IsolationRequest],
   result: Bool,
   body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindPrivate))) && (not ((project request owner) =? (project request requester)))) && ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow)))
 }
 
 theorem{
   name: inv001Holds,
-  parameters: [request : HolospaceIsolation::Request],
+  parameters: [request : HolospaceIsolation::IsolationRequest],
   statement: ((breaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -35,14 +35,14 @@ theorem{
 
 definition{
   name: breaksInv002,
-  parameters: [request : HolospaceIsolation::Request],
+  parameters: [request : HolospaceIsolation::IsolationRequest],
   result: Bool,
   body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindContent))) && ((project request op) =? (HolospaceIsolation::opWrite))) && ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow)))
 }
 
 theorem{
   name: inv002Holds,
-  parameters: [request : HolospaceIsolation::Request],
+  parameters: [request : HolospaceIsolation::IsolationRequest],
   statement: ((breaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -63,14 +63,14 @@ theorem{
 
 definition{
   name: breaksInv003,
-  parameters: [request : HolospaceIsolation::Request],
+  parameters: [request : HolospaceIsolation::IsolationRequest],
   result: Bool,
   body: ((((((((project request requester) <=? 1000000) && ((project request owner) <=? 1000000)) && ((project request kind) <? 2)) && ((project request op) <? 2)) && ((project request kind) =? (HolospaceIsolation::kindPrivate))) && ((project request owner) =? (project request requester))) && (not ((HolospaceIsolation::judge request) =? (HolospaceIsolation::answerAllow))))
 }
 
 theorem{
   name: inv003Holds,
-  parameters: [request : HolospaceIsolation::Request],
+  parameters: [request : HolospaceIsolation::IsolationRequest],
   statement: ((breaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [

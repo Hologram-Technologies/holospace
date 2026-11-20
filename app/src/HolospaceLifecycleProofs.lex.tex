@@ -7,14 +7,14 @@
 \begin{semanticmodule}
 definition{
   name: breaksInv001,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::phaseProvisioned)))) && ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerStarted)))
 }
 
 theorem{
   name: inv001Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv001 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -46,14 +46,14 @@ theorem{
 
 definition{
   name: breaksInv002,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::phaseRunning)))) && ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerPaused)))
 }
 
 theorem{
   name: inv002Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv002 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -85,14 +85,14 @@ theorem{
 
 definition{
   name: breaksInv003,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::phaseSuspended)))) && ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerResumed)))
 }
 
 theorem{
   name: inv003Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv003 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -124,14 +124,14 @@ theorem{
 
 definition{
   name: breaksInv004,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request snapshot) =? (HolospaceLifecycle::snapshotNone))) && ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerResumed)))
 }
 
 theorem{
   name: inv004Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv004 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -163,14 +163,14 @@ theorem{
 
 definition{
   name: breaksInv005,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: ((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::phaseTerminated))) && (not ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerRefused))))
 }
 
 theorem{
   name: inv005Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv005 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -202,14 +202,14 @@ theorem{
 
 definition{
   name: breaksInv006,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: (((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::phaseProvisioned))) && ((project request action) =? (HolospaceLifecycle::actionStart))) && (not ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerStarted))))
 }
 
 theorem{
   name: inv006Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv006 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -241,14 +241,14 @@ theorem{
 
 definition{
   name: breaksInv007,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: (((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::phaseRunning))) && ((project request action) =? (HolospaceLifecycle::actionSuspend))) && (not ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerPaused))))
 }
 
 theorem{
   name: inv007Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv007 request) = false),
   proof: linear_arithmetic{
     definitions: [
@@ -280,14 +280,14 @@ theorem{
 
 definition{
   name: breaksInv008,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   result: Bool,
   body: ((((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && ((project request phase) =? (HolospaceLifecycle::phaseSuspended))) && ((project request snapshot) =? (HolospaceLifecycle::snapshotKept))) && ((project request action) =? (HolospaceLifecycle::actionResume))) && (not ((HolospaceLifecycle::judge request) =? (HolospaceLifecycle::answerResumed))))
 }
 
 theorem{
   name: inv008Holds,
-  parameters: [request : HolospaceLifecycle::Request],
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
   statement: ((breaksInv008 request) = false),
   proof: linear_arithmetic{
     definitions: [

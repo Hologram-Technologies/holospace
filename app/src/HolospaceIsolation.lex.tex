@@ -19,7 +19,7 @@ definition{name: answerAllow, parameters: [], result: Nat, body: 0}
 definition{name: answerDeny, parameters: [], result: Nat, body: 1}
 
 structure{
-  name: Request,
+  name: IsolationRequest,
   type_parameters: [],
   parameters: [],
   fields: [
@@ -130,60 +130,60 @@ definition{
 definition{
   name: decodeField4,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
-  result: (Option Request),
+  result: (Option IsolationRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseOp (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [Request] (record Request {requester := v1, owner := v2, kind := v3, op := v4})) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [IsolationRequest])
+    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [IsolationRequest] (record IsolationRequest {requester := v1, owner := v2, kind := v3, op := v4})) else (ctor Option.none [IsolationRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField3,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat],
-  result: (Option Request),
+  result: (Option IsolationRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseKind (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [IsolationRequest])
+    | Option.some v3 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField4 s (e + 1) v1 v2 v3) else (ctor Option.none [IsolationRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField2,
   parameters: [s : Bytes, start : Nat, v1 : Nat],
-  result: (Option Request),
+  result: (Option IsolationRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseOwner (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [IsolationRequest])
+    | Option.some v2 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField3 s (e + 1) v1 v2) else (ctor Option.none [IsolationRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: decodeField1,
   parameters: [s : Bytes, start : Nat],
-  result: (Option Request),
+  result: (Option IsolationRequest),
   body: (let e : Nat := (fieldEnd s start (Foundation.Bytes::byteLength s)); (match (parseRequester (sliceOf s start (prim subtract e start : Nat)))
-    | Option.none => (ctor Option.none [Request])
-    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [Request])))),
+    | Option.none => (ctor Option.none [IsolationRequest])
+    | Option.some v1 => (if (e <? (Foundation.Bytes::byteLength s)) then (decodeField2 s (e + 1) v1) else (ctor Option.none [IsolationRequest])))),
   axioms: [Quot.sound, propext]
 }
 
 definition{
   name: rule1,
-  parameters: [request : Request],
+  parameters: [request : IsolationRequest],
   result: Bool,
   body: (((project request kind) =? (kindPrivate)) && ((project request owner) =? (project request requester)))
 }
 
 definition{
   name: rule2,
-  parameters: [request : Request],
+  parameters: [request : IsolationRequest],
   result: Bool,
   body: (((project request kind) =? (kindContent)) && ((project request op) =? (opRead)))
 }
 
 definition{
   name: judge,
-  parameters: [request : Request],
+  parameters: [request : IsolationRequest],
   result: Nat,
   body: (if (rule1 request) then (answerAllow) else (if (rule2 request) then (answerAllow) else (answerDeny)))
 }
