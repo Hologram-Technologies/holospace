@@ -316,5 +316,44 @@ theorem{
   },
   axioms: [Classical.choice, Quot.sound, propext]
 }
+
+definition{
+  name: lifecycleBreaksInv009,
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
+  result: Bool,
+  body: (((((((project request phase) <? 4) && ((project request snapshot) <? 2)) && ((project request action) <? 4)) && (not ((project request phase) =? (HolospaceLifecycle::lifecyclePhaseTerminated)))) && ((project request action) =? (HolospaceLifecycle::lifecycleActionTerminate))) && (not ((HolospaceLifecycle::lifecycleJudge request) =? (HolospaceLifecycle::lifecycleAnswerEnded))))
+}
+
+theorem{
+  name: lifecycleInv009Holds,
+  parameters: [request : HolospaceLifecycle::LifecycleRequest],
+  statement: ((lifecycleBreaksInv009 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceLifecycle::lifecycleActionResume,
+      HolospaceLifecycle::lifecycleActionStart,
+      HolospaceLifecycle::lifecycleActionSuspend,
+      HolospaceLifecycle::lifecycleActionTerminate,
+      HolospaceLifecycle::lifecycleAnswerEnded,
+      HolospaceLifecycle::lifecycleAnswerPaused,
+      HolospaceLifecycle::lifecycleAnswerRefused,
+      HolospaceLifecycle::lifecycleAnswerResumed,
+      HolospaceLifecycle::lifecycleAnswerStarted,
+      HolospaceLifecycle::lifecycleJudge,
+      HolospaceLifecycle::lifecyclePhaseProvisioned,
+      HolospaceLifecycle::lifecyclePhaseRunning,
+      HolospaceLifecycle::lifecyclePhaseSuspended,
+      HolospaceLifecycle::lifecyclePhaseTerminated,
+      HolospaceLifecycle::lifecycleRule1,
+      HolospaceLifecycle::lifecycleRule2,
+      HolospaceLifecycle::lifecycleRule3,
+      HolospaceLifecycle::lifecycleRule4,
+      HolospaceLifecycle::lifecycleSnapshotKept,
+      HolospaceLifecycle::lifecycleSnapshotNone,
+      lifecycleBreaksInv009
+    ]
+  },
+  axioms: [Classical.choice, Quot.sound, propext]
+}
 \end{semanticmodule}
 \end{lexlean}

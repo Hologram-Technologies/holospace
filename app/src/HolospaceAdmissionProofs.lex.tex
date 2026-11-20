@@ -214,5 +214,40 @@ theorem{
   },
   axioms: [Quot.sound, propext]
 }
+
+definition{
+  name: admissionBreaksInv007,
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
+  result: Bool,
+  body: ((((((((project request label) <? 2) && ((project request axis) <? 2)) && ((project request stage) <? 2)) && ((project request sources) <? 2)) && ((project request label) =? (HolospaceAdmission::admissionLabelDiffers))) && ((project request sources) =? (HolospaceAdmission::admissionSourcesMore))) && (not ((HolospaceAdmission::admissionJudge request) =? (HolospaceAdmission::admissionAnswerRetry))))
+}
+
+theorem{
+  name: admissionInv007Holds,
+  parameters: [request : HolospaceAdmission::AdmissionRequest],
+  statement: ((admissionBreaksInv007 request) = false),
+  proof: linear_arithmetic{
+    definitions: [
+      HolospaceAdmission::admissionAnswerAccept,
+      HolospaceAdmission::admissionAnswerReject,
+      HolospaceAdmission::admissionAnswerRekey,
+      HolospaceAdmission::admissionAnswerRetry,
+      HolospaceAdmission::admissionAxisBlake3,
+      HolospaceAdmission::admissionAxisSha256,
+      HolospaceAdmission::admissionJudge,
+      HolospaceAdmission::admissionLabelDiffers,
+      HolospaceAdmission::admissionLabelMatches,
+      HolospaceAdmission::admissionRule1,
+      HolospaceAdmission::admissionRule2,
+      HolospaceAdmission::admissionRule3,
+      HolospaceAdmission::admissionSourcesMore,
+      HolospaceAdmission::admissionSourcesNone,
+      HolospaceAdmission::admissionStageImport,
+      HolospaceAdmission::admissionStageRuntime,
+      admissionBreaksInv007
+    ]
+  },
+  axioms: [Quot.sound, propext]
+}
 \end{semanticmodule}
 \end{lexlean}

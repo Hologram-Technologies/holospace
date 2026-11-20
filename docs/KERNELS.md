@@ -9,13 +9,13 @@ One request is a kernel word followed by that kernel's fields; `Holospace::dispa
 | Word | Module | Theorems |
 |---|---|---|
 | `verdict` | `HolospaceLaunchVerdict` | 5 |
-| `admission` | `HolospaceAdmission` | 6 |
+| `admission` | `HolospaceAdmission` | 7 |
 | `isolation` | `HolospaceIsolation` | 3 |
 | `gate` | `HolospaceCapabilityGate` | 16 |
-| `lifecycle` | `HolospaceLifecycle` | 8 |
+| `lifecycle` | `HolospaceLifecycle` | 9 |
 | none (not routed) | `HolospaceIdentity` | 3 |
 
-Proved: the template's gate ran `prismpm verify` on the app at `79ed6a2` and passed, which is Lean checking all 41 theorems with each one's exact axiom set. The same 41 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
+Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 43 theorems with each one's exact axiom set. The same 43 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
 
 Built: the holo at the page above. Its 48 acceptance vectors pass in the template's build, and again when the earlier shell opens the live bytes and asks its own launch verdict kernel (tested). Fingerprint `3caff77ede83bc3c3e5f680380d1f217e0903e51ac04959152f91965d6bbebf7`.
 
@@ -54,24 +54,36 @@ Two tooling faults found: prism-code's generated tests exceed the template's cei
 The launch verdict no longer has a published holo; its kernel is in `kernels/launch-verdict/`.
 provisioning-identity: hand-written LexLean in `kernels/provisioning-identity/src/`, verified through the LexLean gateway (task 223, state "verified"). The gateway returned no attestation id. It is a bare model file, not a full Prism project, and has no judge or vectors.
 
-## Against the 22 approved guarantees
+## The 22 guarantees against the published app
 
-| Lines | Status |
-|---|---|
-| 1 to 4 | Proved (lifecycle). |
-| 5, resume uses the most recent snapshot | By construction: the model keeps one snapshot number. No theorem. |
-| 6, same input gives same result | By construction: the model is a pure function. No theorem. |
-| 7, every durable key derives from the identity | Not proved. A property of the body; to be tested. |
-| 8, different identities never share a key | Not proved. Rests on the hash having no collisions, an assumption. |
-| 9, no read returns another holospace's state | Proved (isolation), with identities modelled as numbers. |
-| 10 to 13 | Proved (admission). |
-| 14 to 16 | Proved (launch-verdict). |
-| 17 | Proved (capability-gate): without a grant the answer is never allow or relayed. It is ask or deny; ask means nothing happens until the user decides. |
-| 18 | Proved (capability-gate): a denied request always answers deny. |
-| 19 | Proved (capability-gate): network never answers allow or relayed without a grant. |
-| 20 | Proved (capability-gate): a network request through an extension or a node never answers allow. When granted it answers relayed (the labelled answer) by rule 8; that it does is tested, not proved. That the shell shows the label is the body's job. |
-| 21 | Proved (provisioning-identity), but trivially: the encoding is a function, so equal inputs give equal outputs. "On any device" is a property of the body; to be tested. |
-| 22 | Proved (provisioning-identity) for a stand-in encoding, `definition * 3 + arch`: changing the architecture changes the encoding, and two different (definition, architecture) pairs never share one. Not proved for the real canonical byte encoding, and the step from encoding to identity rests on the hash having no collisions. |
+Status words. Proved: a theorem of the published app, checked by Lean in the template's gate. By construction: true of the model's shape, with no theorem. Tested: a property of the running code, covered by the shell's tests, which are not in this repository. Assumed: taken on trust.
+
+| # | Guarantee | Status | Where |
+|---|---|---|---|
+| 1 | One state at a time | By construction | The request carries one `phase`, one of four values. |
+| 2 | Only the four moves happen | Proved | `lifecycleInv001` to `003`: started, paused and resumed are answered only from the phase each needs. `lifecycleInv009`: terminate is always answered ended unless already terminated. That the body moves to the phase an answer names is tested. |
+| 3 | Terminated is final | Proved | `lifecycleInv005`: every action in the terminated phase is refused. |
+| 4 | An acknowledged suspend has a snapshot | Tested | The answer `paused` obliges the body to write the snapshot; the host test checks it does. Not a theorem since lifecycle became one step. |
+| 5 | Resume uses the most recent snapshot | Proved in part | `lifecycleInv004`: resume is never answered without a snapshot. That it is the most recent one is tested. |
+| 6 | Same state and event, same result | By construction | The judge is a pure function. |
+| 7 | Every durable key derives from the identity | Tested | A property of the body's key function. |
+| 8 | Different identities never share a key | Assumed | Rests on the hash having no collisions. `encodingInjective` proves it for the model encoding only. |
+| 9 | No read returns another holospace's state | Proved | `isolationInv001`, with identities modelled as numbers. `isolationInv003`: a holospace is never locked out of its own. |
+| 10 | Accepted only if the recomputed hash matches | Proved | `admissionInv001`, `002`: a differing hash is never accepted or re-keyed. |
+| 11 | A mismatch moves to the next source | Proved | `admissionInv007`: a mismatch with a source left always answers retry. `admissionInv005`: never retry with none left. |
+| 12 | All sources failed is a failure | Proved | `admissionInv006`: a mismatch with no source left always answers reject. |
+| 13 | SHA-256 only at import, stored under BLAKE3 | Proved | `admissionInv003`: a SHA-256 name is never answered accept. `admissionInv004`: never re-keyed at runtime. |
+| 14 | Verified only if every check passes | Proved | `verdictInv001` to `004`, and `005`: a sound app is always verified. |
+| 15 | Any failed or skipped check is unverified | Proved | The same four; blocked is the only other answer. |
+| 16 | An unverified app does not run | Tested | A property of the shell; its tests alter real apps at many bytes and none runs. |
+| 17 | Everything denied unless granted | Proved | `gateInv001`, `002`: without a grant the answer is never allow or relayed. It is ask or deny. |
+| 18 | A deny wins over a grant | Proved | `gateInv003`. |
+| 19 | Network only under an explicit grant | Proved | `gateInv004`, `005`. |
+| 20 | A connection through an extension or node is labelled not serverless | Proved in part | `gateInv006`, `007`: such a request is never answered allow, so one that proceeds is answered relayed. That the shell shows the label is tested. |
+| 21 | Same definition, same identity, on any device | Proved for the model | `sameGivesSame`, for a stand-in number encoding. The real byte encoding and "any device" are tested. |
+| 22 | The architecture is part of the identity | Proved for the model | `archChangesIdentity`, `encodingInjective`, same stand-in encoding. The real encoding is tested. |
+
+Count: 12 proved outright, 2 proved in part, 2 proved for a stand-in model, 2 by construction, 3 tested only, 1 assumed. Guarantees 4, 7 and 16 cannot become theorems of this app: they are about what the body does with an answer.
 
 ## Limits
 

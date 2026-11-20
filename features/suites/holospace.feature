@@ -14,7 +14,7 @@ Feature: holospace
   @HK-02 @build
   Scenario: Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import
     Given the model in app/src/HolospaceAdmissionProofs.lex.tex
-    When the Lean kernel checks its 6 theorems during prismpm verify
+    When the Lean kernel checks its 7 theorems during prismpm verify
     Then no request meets any condition holospace.pins.tsv lists for admission
     And requests that begin with admission are answered by HolospaceAdmission
 
@@ -35,7 +35,7 @@ Feature: holospace
   @HK-05 @build
   Scenario: Start, suspend and resume are answered only in the phase each needs, resume never without a snapshot, and nothing follows terminate
     Given the model in app/src/HolospaceLifecycleProofs.lex.tex
-    When the Lean kernel checks its 8 theorems during prismpm verify
+    When the Lean kernel checks its 9 theorems during prismpm verify
     Then no request meets any condition holospace.pins.tsv lists for lifecycle
     And requests that begin with lifecycle are answered by HolospaceLifecycle
 
