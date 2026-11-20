@@ -54,7 +54,7 @@ fn pinned(kernel: &str, proofs: &str) {
     );
 }
 
-/// `HK-01`: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise
+/// `HK-01`: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass and its signature is absent or valid, and blocked otherwise
 #[test]
 fn holospace_hk_01() {
     pinned("verdict", "HolospaceLaunchVerdictProofs");

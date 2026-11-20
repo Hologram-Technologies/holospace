@@ -65,7 +65,7 @@ statement = "An app's pages on every device of one Prism ID meet on a relay topi
 id = "HK-01"
 level = "build"
 suite = "holospace"
-statement = "An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise"
+statement = "An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass and its signature is absent or valid, and blocked otherwise"
 
 [[id]]
 id = "HK-02"

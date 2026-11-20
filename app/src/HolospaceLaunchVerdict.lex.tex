@@ -24,6 +24,14 @@ definition{name: verdictVectorsFailed, parameters: [], result: Nat, body: 1}
 
 definition{name: verdictVectorsSkipped, parameters: [], result: Nat, body: 2}
 
+definition{name: verdictSignatureAbsent, parameters: [], result: Nat, body: 0}
+
+definition{name: verdictSignatureValid, parameters: [], result: Nat, body: 1}
+
+definition{name: verdictSignatureInvalid, parameters: [], result: Nat, body: 2}
+
+definition{name: verdictSignatureUnjudged, parameters: [], result: Nat, body: 3}
+
 definition{name: verdictAnswerVerified, parameters: [], result: Nat, body: 0}
 
 definition{name: verdictAnswerBlocked, parameters: [], result: Nat, body: 1}
@@ -36,7 +44,8 @@ structure{
     {name: seal, type: Nat},
     {name: members, type: Nat},
     {name: provenance, type: Nat},
-    {name: vectors, type: Nat}
+    {name: vectors, type: Nat},
+    {name: signature, type: Nat}
   ]
 }
 
@@ -110,6 +119,13 @@ definition{
 }
 
 definition{
+  name: verdictParseSignature,
+  parameters: [value : Bytes],
+  result: (Option Nat),
+  body: (if (prim equal value 0x616273656e74 : Bool) then (ctor Option.some [Nat] (verdictSignatureAbsent)) else (if (prim equal value 0x76616c6964 : Bool) then (ctor Option.some [Nat] (verdictSignatureValid)) else (if (prim equal value 0x696e76616c6964 : Bool) then (ctor Option.some [Nat] (verdictSignatureInvalid)) else (if (prim equal value 0x756e6a7564676564 : Bool) then (ctor Option.some [Nat] (verdictSignatureUnjudged)) else (ctor Option.none [Nat])))))
+}
+
+definition{
   name: verdictSliceOf,
   parameters: [s : Bytes, start : Nat, count : Nat],
   result: Bytes,
@@ -132,12 +148,22 @@ definition{
 }
 
 definition{
+  name: verdictDecodeField5,
+  parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat, v4 : Nat],
+  result: (Option VerdictRequest),
+  body: (let e : Nat := (verdictFieldEnd s start (Foundation.Bytes::byteLength s)); (match (verdictParseSignature (verdictSliceOf s start (prim subtract e start : Nat)))
+    | Option.none => (ctor Option.none [VerdictRequest])
+    | Option.some v5 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [VerdictRequest] (record VerdictRequest {seal := v1, members := v2, provenance := v3, vectors := v4, signature := v5})) else (ctor Option.none [VerdictRequest])))),
+  axioms: [Quot.sound, propext]
+}
+
+definition{
   name: verdictDecodeField4,
   parameters: [s : Bytes, start : Nat, v1 : Nat, v2 : Nat, v3 : Nat],
   result: (Option VerdictRequest),
   body: (let e : Nat := (verdictFieldEnd s start (Foundation.Bytes::byteLength s)); (match (verdictParseVectors (verdictSliceOf s start (prim subtract e start : Nat)))
     | Option.none => (ctor Option.none [VerdictRequest])
-    | Option.some v4 => (if (e =? (Foundation.Bytes::byteLength s)) then (ctor Option.some [VerdictRequest] (record VerdictRequest {seal := v1, members := v2, provenance := v3, vectors := v4})) else (ctor Option.none [VerdictRequest])))),
+    | Option.some v4 => (if (e <? (Foundation.Bytes::byteLength s)) then (verdictDecodeField5 s (e + 1) v1 v2 v3 v4) else (ctor Option.none [VerdictRequest])))),
   axioms: [Quot.sound, propext]
 }
 
@@ -175,14 +201,21 @@ definition{
   name: verdictRule1,
   parameters: [request : VerdictRequest],
   result: Bool,
-  body: (((((project request seal) =? (verdictSealIntact)) && ((project request members) =? (verdictMembersMatch))) && ((project request provenance) =? (verdictProvenanceConsistent))) && ((project request vectors) =? (verdictVectorsPassed)))
+  body: ((((((project request seal) =? (verdictSealIntact)) && ((project request members) =? (verdictMembersMatch))) && ((project request provenance) =? (verdictProvenanceConsistent))) && ((project request vectors) =? (verdictVectorsPassed))) && ((project request signature) =? (verdictSignatureAbsent)))
+}
+
+definition{
+  name: verdictRule2,
+  parameters: [request : VerdictRequest],
+  result: Bool,
+  body: ((((((project request seal) =? (verdictSealIntact)) && ((project request members) =? (verdictMembersMatch))) && ((project request provenance) =? (verdictProvenanceConsistent))) && ((project request vectors) =? (verdictVectorsPassed))) && ((project request signature) =? (verdictSignatureValid)))
 }
 
 definition{
   name: verdictJudge,
   parameters: [request : VerdictRequest],
   result: Nat,
-  body: (if (verdictRule1 request) then (verdictAnswerVerified) else (verdictAnswerBlocked))
+  body: (if (verdictRule1 request) then (verdictAnswerVerified) else (if (verdictRule2 request) then (verdictAnswerVerified) else (verdictAnswerBlocked)))
 }
 
 definition{
@@ -196,7 +229,7 @@ definition{
   name: verdictDispatch,
   parameters: [value : Bytes],
   result: Bytes,
-  body: (if (112 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (verdictDecodeField1 value 0)
+  body: (if (136 <? (Foundation.Bytes::byteLength value)) then 0x696e76616c6964 else (match (verdictDecodeField1 value 0)
     | Option.none => 0x696e76616c6964
     | Option.some request => (verdictEncodeAnswer (verdictJudge request)))),
   axioms: [Quot.sound, propext]

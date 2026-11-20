@@ -32,7 +32,7 @@ model does not sanction.
 
 | ID | Level | Statement |
 | --- | --- | --- |
-| `HK-01` | `build` | An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise |
+| `HK-01` | `build` | An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass and its signature is absent or valid, and blocked otherwise |
 | `HK-02` | `build` | Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import |
 | `HK-03` | `build` | A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content |
 | `HK-04` | `build` | Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow |

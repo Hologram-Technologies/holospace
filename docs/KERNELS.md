@@ -8,14 +8,14 @@ One request is a kernel word followed by that kernel's fields; `Holospace::dispa
 
 | Word | Module | Theorems |
 |---|---|---|
-| `verdict` | `HolospaceLaunchVerdict` | 5 | Resume uses the most recent snapshot | Proved | `lifecycleInv005`: resume is never answered when the snapshot offered is not the latest. `lifecycleInv004`: never without a snapshot. `lifecycleInv014`: the snapshot number never goes back. The body supplies the two numbers; that it supplies them truthfully is tested. |
+| `verdict` | `HolospaceLaunchVerdict` | 8 | Resume uses the most recent snapshot | Proved | `lifecycleInv005`: resume is never answered when the snapshot offered is not the latest. `lifecycleInv004`: never without a snapshot. `lifecycleInv014`: the snapshot number never goes back. The body supplies the two numbers; that it supplies them truthfully is tested. |
 | `admission` | `HolospaceAdmission` | 7 |
 | `isolation` | `HolospaceIsolation` | 3 | Terminated is final | Proved | `lifecycleInv006`: every action in the terminated phase is refused. `lifecycleInv013`: the next phase after terminated is terminated. |
 | `gate` | `HolospaceCapabilityGate` | 16 |
 | `lifecycle` | `HolospaceLifecycle` | 14 |
 | none (not routed) | `HolospaceIdentity` | 4 |
 
-Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 49 theorems with each one's exact axiom set. The same 49 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
+Proved: the template's gate runs `prismpm verify` on every commit, which is Lean checking all 52 theorems with each one's exact axiom set. The same 52 are also accepted by Lean's kernel as WebAssembly on a developer machine in about 20 s (`prism_prove`), with nothing sent anywhere.
 
 Built: the holo at the page above. Its 48 acceptance vectors pass in the template's build, and again when the earlier shell opens the live bytes and asks its own launch verdict kernel (tested). The fingerprint is shown on the page; it changes with every commit, because the holo's provenance names the commit that built it.
 
@@ -56,7 +56,7 @@ provisioning-identity: hand-written LexLean in `kernels/provisioning-identity/sr
 
 ## The 22 guarantees against the published app
 
-Phase 1 is closed against this table at `b8a4845` (2026-11-20): the gate passed there with all 49 theorems, and every guarantee below is either proved or explicitly marked. Closing Phase 1 does not mean every guarantee is proved; it means none is left unstated.
+Phase 1 is closed against this table at `b8a4845` (2026-11-20): the gate passed there with all 52 theorems, and every guarantee below is either proved or explicitly marked. Closing Phase 1 does not mean every guarantee is proved; it means none is left unstated.
 
 Status words. Proved: a theorem of the published app, checked by Lean in the template's gate. By construction: true of the model's shape, with no theorem. Tested: a property of the running code, covered by the shell's tests, which are not in this repository. Assumed: taken on trust.
 
@@ -75,8 +75,8 @@ Status words. Proved: a theorem of the published app, checked by Lean in the tem
 | 11 | A mismatch moves to the next source | Proved | `admissionInv007`: a mismatch with a source left always answers retry. `admissionInv005`: never retry with none left. |
 | 12 | All sources failed is a failure | Proved | `admissionInv006`: a mismatch with no source left always answers reject. |
 | 13 | SHA-256 only at import, stored under BLAKE3 | Proved | `admissionInv003`: a SHA-256 name is never answered accept. `admissionInv004`: never re-keyed at runtime. |
-| 14 | Verified only if every check passes | Proved | `verdictInv001` to `004`, and `005`: a sound app is always verified. |
-| 15 | Any failed or skipped check is unverified | Proved | The same four; blocked is the only other answer. |
+| 14 | Verified only if every check passes | Proved | `verdictInv001` to `006`: never verified with a broken seal, a differing member, inconsistent provenance, a failed or skipped replay, an invalid signature, or a signature that could not be judged. `007`, `008`: a sound app with no signature, or a valid one, is always verified. No reader can judge a holo's signed statements today, so the body reports only absent or unjudged, and an app that carries statements is blocked. |
+| 15 | Any failed or skipped check is unverified | Proved | The same six; blocked is the only other answer. |
 | 16 | An unverified app does not run | Tested | A property of the shell; its tests alter real apps at many bytes and none runs. |
 | 17 | Everything denied unless granted | Proved | `gateInv001`, `002`: without a grant the answer is never allow or relayed. It is ask or deny. |
 | 18 | A deny wins over a grant | Proved | `gateInv003`. |

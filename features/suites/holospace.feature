@@ -5,9 +5,9 @@ Feature: holospace
   Each claim is every theorem of one module, listed in holospace.pins.tsv.
 
   @HK-01 @build
-  Scenario: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise
+  Scenario: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass and its signature is absent or valid, and blocked otherwise
     Given the model in app/src/HolospaceLaunchVerdictProofs.lex.tex
-    When the Lean kernel checks its 5 theorems during prismpm verify
+    When the Lean kernel checks its 8 theorems during prismpm verify
     Then no request meets any condition holospace.pins.tsv lists for verdict
     And requests that begin with verdict are answered by HolospaceLaunchVerdict
 

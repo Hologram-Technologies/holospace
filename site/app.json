@@ -4,7 +4,7 @@
   "live": "https://hologram-technologies.github.io/holospace/",
   "purpose": "Decides every Holospace question in one proved app: whether an app is verified and may run, whether received bytes are accepted, which stored item a holospace may touch, what a guest may read, write or reach, and which lifecycle step is allowed. Send a kernel word (verdict, admission, isolation, gate or lifecycle) and that kernel's fields.",
   "inputLabel": "Request: kernel word, then its fields",
-  "placeholder": "verdict intact match consistent passed",
+  "placeholder": "verdict intact match consistent passed absent",
   "submitLabel": "Decide",
   "outputLabel": "Answer",
   "answers": {
@@ -31,9 +31,9 @@
   },
   "promise": {
     "headline": "Every Holospace decision is made by a rule Lean has proved things about.",
-    "detail": "Five kernels and an identity encoding, 49 theorems in all, each checked by the Lean kernel when this page was built. The proofs are about the rules; that the shell obeys an answer is tested, not proved."
+    "detail": "Five kernels and an identity encoding, 52 theorems in all, each checked by the Lean kernel when this page was built. The proofs are about the rules; that the shell obeys an answer is tested, not proved."
   },
-  "claim": "HK-01: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise. HK-02: Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import. HK-03: A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content. HK-04: Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow. HK-05: Start, suspend and resume are answered only in the phase each needs, resume only with the latest snapshot, and nothing follows terminate. HK-06: The same architecture and definition digest give the same identity bytes, and a different architecture or digest always gives different ones.",
+  "claim": "HK-01: An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass and its signature is absent or valid, and blocked otherwise. HK-02: Bytes whose hash differs from the requested name are never accepted or re-keyed, and a SHA-256 name is re-keyed only at import. HK-03: A holospace is never allowed another holospace's private state, is always allowed its own, and never writes shared content. HK-04: Nothing is allowed without a grant, a denied request is always denied, and a network request through an extension or a node is never answered allow. HK-05: Start, suspend and resume are answered only in the phase each needs, resume only with the latest snapshot, and nothing follows terminate. HK-06: The same architecture and definition digest give the same identity bytes, and a different architecture or digest always gives different ones.",
   "proposition": {
     "name": "dispatch",
     "text": "dispatch request :=\n  verdict ...   -> HolospaceLaunchVerdict.judge\n  admission ... -> HolospaceAdmission.judge\n  isolation ... -> HolospaceIsolation.judge\n  gate ...      -> HolospaceCapabilityGate.judge\n  lifecycle ... -> HolospaceLifecycle.judge\n  otherwise     -> invalid",
@@ -41,8 +41,8 @@
   },
   "theorems": [
     {
-      "name": "HolospaceLaunchVerdictProofs: 5 theorems",
-      "statement": "An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass, and blocked otherwise",
+      "name": "HolospaceLaunchVerdictProofs: 8 theorems",
+      "statement": "An app is answered verified exactly when its seal, members, provenance and acceptance vectors all pass and its signature is absent or valid, and blocked otherwise",
       "how": "Proved by linear arithmetic, checked by the Lean kernel by prismpm verify in CI",
       "where": "app/src/HolospaceLaunchVerdictProofs.lex.tex"
     },
